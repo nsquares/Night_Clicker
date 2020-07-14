@@ -225,9 +225,9 @@ namespace WpfApp2
         //ogDelay works perfectly fine but this does not (only difference is that Im not using a method to modify ogDelay and I put the algorithm in the parent)
         //SOLVED: you have to return because I am creating a new instance because I made the parameter 'colorDelay' in the modifyRun function so it is not directly doing math on the targeted variable
 
-        float blueDelay = 2000;    //you can modify these while running the application
-        float redDelay = 2000;
-        float whiteDelay = 6000;
+        float blueDelay = 1500;    //you can modify these while running the application
+        float redDelay = 1500;
+        float whiteDelay = 5000;
 
         private void Log_Click(object sender, RoutedEventArgs e)  //this will turn into a log button
         {
@@ -301,11 +301,11 @@ namespace WpfApp2
 
             async Task oneClick(int x, int y, float delay, string colorHex, string whatColor)
             {
-                AddLine($"Delay for {delay / 1000} seconds then click _{whatColor.ToUpper()}_ button");
+                AddLine($"Delay for {delay / 1000} seconds then click _{whatColor.ToUpper()}_ button");    //delete this 
                 SetCursorPos(x, y);
-                await Task.Delay((int)delay);
+                await Task.Delay((int)delay);                                                            // and delete this once we get the global key logger working to save time
 
-                if (GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
+                if (GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)      //also why do the mouseShok here when it should really be in the for loop in checkColorBeforeClicking()?
                 {
                     AddLine($"Checking {whatColor} button now");
                     await checkColorBeforeClicking((int)delay, colorHex, x, y);
@@ -324,12 +324,13 @@ namespace WpfApp2
             int secondX = 1600;
             int secondY = 850;
 
-            int pausePixelX = 101;
+            int pausePixelX = 101;      // TODO: hey man change these two variables to be the pause button again and...
             int pausePixelY = 925;
 
             string blueHex = "#FFFFFFFF";  // FF005F89   (originial)
             string redHex = "#FFFFFFFF";  // FF792201   
-            string whiteHex = "#FFFFFFFF";
+
+            string whiteHex = "#FFFFFFFF";  // TODO: find the color of white being overlayed by the black end screen and test to see if it is always the same color on every level (is anni different than other levels because of that unique anni report rectangle in the middle of the screen)
 
 
             if (numOfRunsTB.Text != "")          //user must input the number of runs for the for loop to run through for any of this to work
@@ -355,8 +356,8 @@ namespace WpfApp2
 
 
                     //here for visual indication
-                    AddLine("Wait for 20 seconds before first color check. I will move to 'Results' text without clicking");
-                    await Task.Delay(20000); //there will be a loading screen and the mission starting so this is why it is 20 seconds, no real rush here
+                    AddLine("Wait for 25 seconds before first color check. I will move to 'Results' text without clicking");
+                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 20 seconds, no real rush here
                    
                     AddLine("Initializing color check for loop phase 3 (WHITE)");
                     await oneClick(pausePixelX, pausePixelY, whiteDelay, whiteHex, "white");
@@ -408,18 +409,7 @@ namespace WpfApp2
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+        // I might as well delete the unqiue method below me and copy it into the oneClick() method above me that is in the night_run() method
 
 
         private async Task checkColorBeforeClicking(int delay, string hexColor, int pixelX, int pixelY)            //make time easy to read?

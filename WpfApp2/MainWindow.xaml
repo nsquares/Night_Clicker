@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
-        mc:Ignorable="d"
-        Title="C l i c k" Height="700" Width="710" MinHeight="700" MinWidth="710" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Topmost="True" Closing="Window_Closing"> 
+        mc:Ignorable="d"        
+        Title="C l i c k" Height="700" Width="710" MinHeight="700" MinWidth="710" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closing="Window_Closing" > 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -232,12 +232,12 @@
 
 
 
-        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"  ></RichTextBox>
+        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
 
-        
-        
-        
-        
+
+
+
+
         <!--<Canvas Grid.Column="0" Grid.Row="8" Height="20" Width="800" VerticalAlignment="Top">
             <Line
                 X1="0" Y1="5"

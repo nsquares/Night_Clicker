@@ -25,64 +25,10 @@ namespace WpfApp2
     /// </summary>
     public partial class MainWindow : Window
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-
-            public static implicit operator Point(POINT point)
-            {
-                return new Point(point.X, point.Y);
-            }
-        }
-
-        [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
-
-        public static Point GetCursorPosition()
-        {
-            POINT lpPoint;
-            GetCursorPos(out lpPoint);
-            // NOTE: If you need error handling
-            // bool success = GetCursorPos(out lpPoint);
-            // if (!success)
-
-            return lpPoint;
-        }
-
-        
-
-        [DllImport("user32.dll")]
-        static extern bool SetCursorPos(int X, int Y);
-
-        [DllImport("user32.dll")]
-        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
-
-        public const int MOUSEEVENT_LEFTDOWN = 0x02;
-        public const int MOUSEEVENT_LEFTUP = 0x04;
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr GetDesktopWindow();
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr GetWindowDC(IntPtr window);
-
-
-        [DllImport("gdi32.dll", SetLastError = true)]
-        public static extern uint GetPixel(IntPtr dc, int x, int y);
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern int ReleaseDC(IntPtr window, IntPtr dc);
+        Utilities utilities = new Utilities();
 
 
         // is this how I can get keyboard input globally?
-        private KeyboardInput globalKeyboard;
-
-
         
 
 
@@ -119,58 +65,19 @@ namespace WpfApp2
                 { 0,0 }
             };
 
-            AddLine($"Current Mouse Position: {GetCursorPosition().ToString()}");
+            AddLine($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
 
-
-            globalKeyboard = new KeyboardInput();
-            globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
-            
-
-        }
-
-        //bool pleaseStop = false;
-        private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)
-        {            
-            if (Keyboard.IsKeyDown(Key.RightShift))
-            {
-                //pleaseStop = true;
-                AddLine("Right_shift has been pressed, thats all I do right now");
-                nightButton.Dispatcher.DisableProcessing();
-                //AddLine("nope, I actually just ended the dispatcher");
-            }            
-            //throw new NotImplementedException();
-            //AddLine("this is it");            
+  
         }
 
 
-
-
-        //int counter = 0;
-        private void Timer_Tick(object sender, EventArgs e)     //will change wpf starttime to be starttime of night_click method because finishtime is finishtime of night_click method, why even track application uptime and indirectly figure out the night run time-length?
-        {
-
-            //await Task.Delay(2000);
-            timeLabel.Content = DateTime.Now.ToLongTimeString();
-
-            utcLabel.Content = DateTime.UtcNow.ToLongTimeString(); //I should probably do some math on this boi to get it to reflect what in-app uses to determine what is a new day
-
-            //DateTime.Now.Subtract(d);
-
-            //counter++;
-
-            //DateTime.UtcNow
-            //d.TimeOfDay
-            //timeLabel.Content = d.Kind; //this outputs local so thats good
-            //timeLabel.Content = d.Hour + ": " + d.Minute + ": " + d.Second;   =   DateTime.Now.ToLongTimeString();
-        }
-        
 
 
         public void AddLine(string text)
-        {            
+        {
 
             //outputBox.Dispatcher.BeginInvoke(new (() =>
-            
+
 
             outputBox.AppendText(text);
             outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
@@ -184,9 +91,41 @@ namespace WpfApp2
                 }));*/
 
         }
+
+
+        
+
+
+
+
+
+        //int counter = 0;
+        private void Timer_Tick(object sender, EventArgs e)     //will change wpf starttime to be starttime of night_click method because finishtime is finishtime of night_click method, why even track application uptime and indirectly figure out the night run time-length?
+        {
+
+            //await Task.Delay(2000);
+            timeLabel.Content = DateTime.Now.ToLongTimeString();
+
+            utcLabel.Content = DateTime.UtcNow.ToLongTimeString(); //I should probably do some math on this boi to get it to reflect what in-app uses to determine what is a new day
+            //can I get a utc-7 in the chat?
+
+
+            //DateTime.Now.Subtract(d);
+
+            //counter++;
+
+            //DateTime.UtcNow
+            //d.TimeOfDay
+            //timeLabel.Content = d.Kind; //this outputs local so thats good
+            //timeLabel.Content = d.Hour + ": " + d.Minute + ": " + d.Second;   =   DateTime.Now.ToLongTimeString();
+        }
+        
+
+
+
         private void Help_Click(object sender, RoutedEventArgs e)
         {
-            AddLine("lol");
+            //AddLine("lol");
         }
 
         //maybe a daily ak run as well later on? too many variables 
@@ -225,18 +164,20 @@ namespace WpfApp2
         //ogDelay works perfectly fine but this does not (only difference is that Im not using a method to modify ogDelay and I put the algorithm in the parent)
         //SOLVED: you have to return because I am creating a new instance because I made the parameter 'colorDelay' in the modifyRun function so it is not directly doing math on the targeted variable
 
-        float blueDelay = 1500;    //you can modify these while running the application
-        float redDelay = 1500;
-        float whiteDelay = 5000;
+
 
         private void Log_Click(object sender, RoutedEventArgs e)  //this will turn into a log button
         {
+            /*
             if (nightRunDelaysCB.IsChecked == true)
             {
-                blueDelay = modifyDelayRun(blueDelay, blueTB, "Blue");
-                redDelay = modifyDelayRun(redDelay, redTB, "Red");
-                whiteDelay = modifyDelayRun(whiteDelay, whiteTB, "White");
+                nightWin.blueDelay = modifyDelayRun(nightWin.blueDelay, blueTB, "Blue");
+                nightWin.redDelay = modifyDelayRun(nightWin.redDelay, redTB, "Red");
+                nightWin.whiteDelay = modifyDelayRun(nightWin.whiteDelay, whiteTB, "White");
             }
+            */
+
+            AddLine("im commented out");
         }       
 
         private float modifyDelayRun(float colorDelay, TextBox inputDelay, string ID)   //okay so this method has to be a return and  blueDelay = modifyRun(); has to happen for blueDelay to update successfully when used in another completely different method
@@ -277,195 +218,39 @@ namespace WpfApp2
             AddLine("alright im ready to start");
             nightRunThread.Start();
             */
-            
-            
-            
+
             //Thread pleaseKill = new Thread(new ThreadStart());
-            
 
-            nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
-
-            
+            //nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
             //nightRun();
-            
-        }
 
 
 
-
-        private async void nightRun()
-        {
-            AddLine("To end the Night Run, move the mouse or hold the right shift key");
-            bool mouseShok = false;
             
 
-            async Task oneClick(int x, int y, float delay, string colorHex, string whatColor)
+            if (numOfRunsTB.Text != "")
             {
-                AddLine($"Delay for {delay / 1000} seconds then click _{whatColor.ToUpper()}_ button");    //delete this 
-                SetCursorPos(x, y);
-                await Task.Delay((int)delay);                                                            // and delete this once we get the global key logger working to save time
+                nightWin nightWin = new nightWin();
 
-                if (GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)      //also why do the mouseShok here when it should really be in the for loop in checkColorBeforeClicking()?
-                {
-                    AddLine($"Checking {whatColor} button now");
-                    await checkColorBeforeClicking((int)delay, colorHex, x, y);
-                }
-                else
-                {
-                    AddLine($"Whoa, you moved the mouse before the {whatColor.ToUpper()} color check!  _m o u s e   w a s   s h a k e n_");
-                    mouseShok = true;
-                }
-            }
+                nightWin.numberOfRuns = numOfRunsTB.Text;
 
-
-            int firstX = 1625;          //hard code all of these variables
-            int firstY = 950;
-
-            int secondX = 1600;
-            int secondY = 850;
-
-            int pausePixelX = 101;      // TODO: hey man change these two variables to be the pause button again and...
-            int pausePixelY = 925;
-
-            string blueHex = "#FFFFFFFF";  // FF005F89   (originial)
-            string redHex = "#FFFFFFFF";  // FF792201   
-
-            string whiteHex = "#FFFFFFFF";  // TODO: find the color of white being overlayed by the black end screen and test to see if it is always the same color on every level (is anni different than other levels because of that unique anni report rectangle in the middle of the screen)
-
-
-            if (numOfRunsTB.Text != "")          //user must input the number of runs for the for loop to run through for any of this to work
-            {
                 DateTime startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
 
-                for (int i = 0; i < Int32.Parse(numOfRunsTB.Text); i++) //will do however much based on input
-                {
-
-
-                    AddLine($"\n ---Night_Run Counter: {i + 1}");
-                    //if (Keyboard.IsKeyDown(Key.RightShift)) { AddLine("Right Shift is pressed, ok"); break; }
-
-
-                    await oneClick(firstX, firstY, blueDelay, blueHex, "blue");
-
-                    //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-                    await oneClick(secondX, secondY, redDelay, redHex, "red");
-
-                    //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-                    //here for visual indication
-                    AddLine("Wait for 25 seconds before first color check. I will move to 'Results' text without clicking");
-                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 20 seconds, no real rush here
-                   
-                    AddLine("Initializing color check for loop phase 3 (WHITE)");
-                    await oneClick(pausePixelX, pausePixelY, whiteDelay, whiteHex, "white");
-
-
-
-                }
-
-
-
-
-
-                AddLine("---------All Knight Runs Finished");
-
-                if (shutDownCB.IsChecked == true)
-                {
-                    //first need to close nox which will be a couple of clicks
-                    //pressing the pg_up or pg_dwn opens the apps opened on the phone screen so maybe use an automated keyboard press instead of click?
-
-
-                    //hard code all of this because it will always be the same                   
-                    leftMouseClick(20, 1175);
-                    await Task.Delay(1000);
-                    leftMouseClick(20, 1140);
-                    await Task.Delay(1000);
-                    SetCursorPos(20, 1050);    //change this to leftMouseClick when ready
-                    AddLine("CY@");
-
-                }
-
-                finishLabel.Content = DateTime.Now.Subtract(startTime);
+                nightWin.Show();
             }
             else
             {
-                AddLine("Oi, how many runs do you want?");
+                AddLine("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
             }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // I might as well delete the unqiue method below me and copy it into the oneClick() method above me that is in the night_run() method
-
-
-        private async Task checkColorBeforeClicking(int delay, string hexColor, int pixelX, int pixelY)            //make time easy to read?
-        {
-            for (int j = 0; j < 250; j++) //last for max 25 minutes even  //actually I do not know because the delay can change
-            {
-                if (Keyboard.IsKeyDown(Key.RightShift))
-                {
-                    AddLine("Right Shift is pressed \n KEEP HOLDING");
-                    break;
-                }
-                await Task.Delay(delay);
-                
-                if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay/1000)) / 60)} minutes"); }
-                else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay/1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay/1000)) / 60)} minutes"); }
-
-                if (GetColorAt(pixelX, pixelY).ToString() == hexColor)  //nah, its going to be clicked when a specific hex color is found at this specific pixel
-                {                                                             
-                    AddLine(GetColorAt(pixelX, pixelY).ToString());          //feedback
-                    AddLine($"Delay for {delay/1000} seconds before clicking");
-                    await Task.Delay(delay);
-                    leftMouseClick(pixelX, pixelY);
-                    return;
-                }
-            }
+            
             
         }
 
 
-        public void replaceLine(string oldLine, string newLine)
-        {
-            TextRange text = new TextRange(outputBox.Document.ContentStart, outputBox.Document.ContentEnd);   //select all text
-            TextPointer current = text.Start.GetInsertionPosition(LogicalDirection.Forward);   
-            while (current != null)                                                                    //cursor through like sql
-            {
-                string textInRun = current.GetTextInRun(LogicalDirection.Forward);
-                if (!string.IsNullOrWhiteSpace(textInRun))
-                {
-                    int index = textInRun.IndexOf(oldLine);
-                    if (index != -1)
-                    {
-                        TextPointer selectionStart = current.GetPositionAtOffset(index, LogicalDirection.Forward);
-                        TextPointer selectionEnd = selectionStart.GetPositionAtOffset(oldLine.Length, LogicalDirection.Forward);
-                        TextRange selection = new TextRange(selectionStart, selectionEnd);
-                        selection.Text = newLine;
-                        selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);  
-                        outputBox.Selection.Select(selection.Start, selection.End);                      // this is used to update
-                        //outputBox.Focus();   not needed really i think
-                    }
-                }
-                current = current.GetNextContextPosition(LogicalDirection.Forward);
-            }
-        }
 
 
-
+        
 
         //---------------------------------------------------------------(end of night run methods)------------------------------------------------------------------------------------------------
 
@@ -475,8 +260,8 @@ namespace WpfApp2
         private async void Color_Click(object sender, RoutedEventArgs e)
         {
             getInput(allXandYint, allTBInput);
-            SetCursorPos(allXandYint[0, 0], allXandYint[0, 1]);
-            AddLine(GetColorAt(allXandYint[0, 0], allXandYint[0, 1]).ToString());
+            Utilities.SetCursorPos(allXandYint[0, 0], allXandYint[0, 1]);
+            AddLine(utilities.GetColorAt(allXandYint[0, 0], allXandYint[0, 1]).ToString());
             await Task.Delay(500);
             AddLine("I do nothing rn but check color");
         }
@@ -485,7 +270,7 @@ namespace WpfApp2
             getInput(allXandYint, allTBInput);
 
             await Task.Delay(500);
-            SetCursorPos(allXandYint[1, 0], allXandYint[1, 1]);
+            Utilities.SetCursorPos(allXandYint[1, 0], allXandYint[1, 1]);
             
             AddLine("--------Finished Preview");
 
@@ -498,14 +283,14 @@ namespace WpfApp2
         }
 
 
-        private async void CLICK(object sender, RoutedEventArgs e) 
+        private async void  CLICK(object sender, RoutedEventArgs e) 
         {
 
             //clickingDelayTB
             AddLine("ight m8, u have 10 seconds to position the mouse starting now");
             await Task.Delay(10000);
-            int gotX = (int)GetCursorPosition().X;
-            int gotY = (int)GetCursorPosition().Y;
+            int gotX = (int)Utilities.GetCursorPosition().X;
+            int gotY = (int)Utilities.GetCursorPosition().Y;
             int numOfClicks = 2;                    //defaults
             int ogDelay = 300;
 
@@ -542,7 +327,7 @@ namespace WpfApp2
                 {
                     if (Keyboard.IsKeyDown(Key.RightShift)) { break; }
                     await Task.Delay(ogDelay);
-                    leftMouseClick(gotX, gotY);
+                    Utilities.leftMouseClick(gotX, gotY);
                     AddLine($"Click number {i+1}");
                 }
             }
@@ -552,7 +337,7 @@ namespace WpfApp2
                 {
                     if (Keyboard.IsKeyDown(Key.RightShift)) { break; }
                     await Task.Delay(ogDelay);
-                    leftMouseClick(gotX, gotY);
+                    Utilities.leftMouseClick(gotX, gotY);
                 }
             }
            
@@ -564,15 +349,15 @@ namespace WpfApp2
         //-----------------------------------------------------------------------------(Utilities)------------------------------------------------------------------------------------
         private void getInput(int[,] intArray, TextBox[,] TBarray)             //why is this an array and involves populating it? (too busy to fix this)
         {   //clear all data points first
-            for (int i=0; i<(intArray.Length/2); i++)
+            for (int i = 0; i < (intArray.Length / 2); i++)
             {
                 intArray[i, 0] = 0;
                 intArray[i, 1] = 0;
             }
 
-            for (int i=0; i<(intArray.Length/2); i++)
+            for (int i = 0; i < (intArray.Length / 2); i++)
             {
-                if ((TBarray[i,0].Text != "") && (TBarray[i,1].Text != ""))
+                if ((TBarray[i, 0].Text != "") && (TBarray[i, 1].Text != ""))
                 {
                     try
                     {
@@ -589,39 +374,18 @@ namespace WpfApp2
                 }
                 else
                 {
-                    AddLine($"Row {TBarray[i, 0].Name} or/and {TBarray[i,1].Name} is blank");
+                    AddLine($"Row {TBarray[i, 0].Name} or/and {TBarray[i, 1].Name} is blank");
                 }
             }
         }
 
-        byte[] rgb;
-        public Color GetColorAt(int x, int y)   
-        {
-            IntPtr desk = GetDesktopWindow();
-            IntPtr dc = GetWindowDC(desk);
-            uint a = GetPixel(dc, x, y);
-            ReleaseDC(desk, dc);
-            //Console.WriteLine($"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{a}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
-            //Console.WriteLine($"\n\n\n\n\n\n\n\n\n\n\n\n\n R: {(byte)((a >> 0) & 0xff)}");
-            //Console.WriteLine($"\n G: {(byte)((a >> 8) & 0xff)}\n");
-            //Console.WriteLine($" B: {(byte)((a >> 16) & 0xff)}\n\n");
-
-            //rgb = new byte[] { (byte)((a >> 0) & 0xff), (byte)((a >> 8) & 0xff), (byte)((a >> 16) & 0xff) };
-
-            return Color.FromArgb(255, (byte)((a >> 0) & 0xff), (byte)((a >> 8) & 0xff), (byte)((a >> 16) & 0xff));
-        }
-        public static void leftMouseClick(int xpos, int ypos)
-        {
-            SetCursorPos(xpos, ypos);
-            mouse_event(MOUSEEVENT_LEFTDOWN, xpos, ypos, 0, 0);
-            mouse_event(MOUSEEVENT_LEFTUP, xpos, ypos, 0, 0);
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            globalKeyboard.Dispose();
-            Console.WriteLine("ima take out the trash (i.e. dispose key-logger bro)");
+            //nightWin.Close();       //set owner properties on nightWin to be owned by MainWindow so that it closes automattcailly when Main window closes
+            
+            
+            //this.Close();
+            System.Windows.Application.Current.Shutdown();
         }
 
 

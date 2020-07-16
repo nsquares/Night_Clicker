@@ -25,6 +25,8 @@ namespace WpfApp2
     /// </summary>
     public partial class MainWindow : Window
     {
+
+
         Utilities utilities = new Utilities();
 
 
@@ -69,6 +71,7 @@ namespace WpfApp2
 
   
         }
+
 
 
 
@@ -200,11 +203,7 @@ namespace WpfApp2
 
 
 
-
-
-
-
-
+        
 
         private void Night_Click(object sender, RoutedEventArgs e)
         {
@@ -217,40 +216,59 @@ namespace WpfApp2
             nightRunThread.IsBackground = true;
             AddLine("alright im ready to start");
             nightRunThread.Start();
-            */
+            // ---------------------------------------------------------------------------------------------- please do the /* but the ending one here because yea */
 
             //Thread pleaseKill = new Thread(new ThreadStart());
 
             //nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
             //nightRun();
 
+            void ThreadProc()
+            {
+                nightWin nightWinForThread = new nightWin();
+                if (Utilities.thebigMUTEXboi.WaitOne(0, true))
+                {
+                    nightWinForThread.Show();
+                    System.Windows.Threading.Dispatcher.Run();  // what is the point of this?
+                }                
+            }
 
 
-            
 
             if (numOfRunsTB.Text != "")
-            {
-                nightWin nightWin = new nightWin();
+            {              
+                Thread nightThread = new Thread(new ThreadStart(ThreadProc));
+                nightThread.SetApartmentState(ApartmentState.STA);
+                nightThread.IsBackground = true;
+                nightThread.Start();
 
-                nightWin.numberOfRuns = numOfRunsTB.Text;
+                
+
+                nightWin nightWinTransferVariable = new nightWin();
+                nightWinTransferVariable.numberOfRuns = numOfRunsTB.Text;
 
                 DateTime startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
 
-                nightWin.Show();
             }
             else
             {
-                AddLine("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
+                //AddLine("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
+                AddLine("Oi, how many runs do you want?");
             }
-            
-            
-        }
 
 
 
-
+        } 
         
+
+
+
+
+
+
+
+
 
         //---------------------------------------------------------------(end of night run methods)------------------------------------------------------------------------------------------------
 
@@ -382,9 +400,14 @@ namespace WpfApp2
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //nightWin.Close();       //set owner properties on nightWin to be owned by MainWindow so that it closes automattcailly when Main window closes
-            
-            
+
+
             //this.Close();
+            //need to abort or shut down all threads or like deal with this child parent window relationship that im about to make
+            
+            // TODO: something here needs to change
+            
+            Console.WriteLine(Thread.CurrentThread.Name);
             System.Windows.Application.Current.Shutdown();
         }
 

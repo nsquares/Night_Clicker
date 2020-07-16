@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -11,6 +12,9 @@ namespace WpfApp2
 {
     class Utilities
     {
+        public static Mutex thebigMUTEXboi = new Mutex();
+
+
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT
         {

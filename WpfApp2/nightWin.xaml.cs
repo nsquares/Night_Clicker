@@ -35,9 +35,11 @@ namespace WpfApp2
 
         }
 
+
+
         private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
         {
-            if (Keyboard.IsKeyDown(Key.RightShift))
+            if (Keyboard.IsKeyDown(Key.RightShift) && this.IsLoaded)
             {
                 //pleaseStop = true;
                 //AddLine("Right_shift has been pressed, thats all I do right now");
@@ -52,15 +54,19 @@ namespace WpfApp2
                 //nightButton.Dispatcher.BeginInvokeShutdown(DispatcherPriority.Normal);  // I might as well just go this.Close()
                 //AddLine("nope, I actually just ended the dispatcher");
 
-                Console.WriteLine("ima take out the trash (i.e. dispose key-logger bro)");
 
-                globalKeyboard.Dispose();
-                this.Close();
+                //this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
+
+                Utilities.leftMouseClick(658, 430);
+                //Utilities.SetCursorPos(658, 430);
 
             }
             //throw new NotImplementedException();
             //AddLine("this is it");            
         }
+
+
+
 
 
         public void AddLine(string text)
@@ -213,10 +219,6 @@ namespace WpfApp2
 
                 */
             }
-            else
-            {
-                AddLine("Oi, how many runs do you want?");
-            }
         }
 
 
@@ -248,9 +250,13 @@ namespace WpfApp2
             }
         }
 
-        
 
 
-
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Console.WriteLine("ima take out the trash (i.e. dispose key-logger bro)");
+            globalKeyboard.Dispose();
+            Utilities.thebigMUTEXboi.ReleaseMutex();            
+        }
     }
 }

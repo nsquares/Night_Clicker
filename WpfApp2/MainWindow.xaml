@@ -232,7 +232,7 @@
 
 
 
-        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
+        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
 
 
 

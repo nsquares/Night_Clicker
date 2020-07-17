@@ -201,7 +201,7 @@ namespace WpfApp2
 
 
 
-        nightWin nightWinInstance = new nightWin();
+        
 
         private void Night_Click(object sender, RoutedEventArgs e)
         {
@@ -226,9 +226,9 @@ namespace WpfApp2
 
 
             if (numOfRunsTB.Text != "" && !nightWin.doIExist)
-            {              
+            {
+                nightWin nightWinInstance = new nightWin();
 
-                
                 nightWinInstance.Owner = this;
                 nightWinInstance.Show();
                 nightWinInstance.numberOfRuns = numOfRunsTB.Text;

@@ -268,6 +268,7 @@ namespace WpfApp2
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            doIExist = false;
             Console.WriteLine("ima take out the trash (i.e. dispose key-log and GC)");
             globalKeyboard.Dispose();
 
@@ -287,5 +288,7 @@ namespace WpfApp2
         {
             doIExist = true;
         }
+
+
     }
 }

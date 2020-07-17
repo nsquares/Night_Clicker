@@ -29,8 +29,6 @@ namespace WpfApp2
 
         Utilities utilities = new Utilities();
 
-
-        // is this how I can get keyboard input globally?
         
 
 
@@ -203,7 +201,7 @@ namespace WpfApp2
 
 
 
-        
+        nightWin nightWinInstance = new nightWin();
 
         private void Night_Click(object sender, RoutedEventArgs e)
         {
@@ -223,39 +221,18 @@ namespace WpfApp2
             //nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
             //nightRun();
 
-            void ThreadProc()
-            {
-                nightWin nightWinForThread = new nightWin();
-                if (Utilities.thebigMUTEXboi.WaitOne(0, true))
-                {
-                    nightWinForThread.Show();
-                    System.Windows.Threading.Dispatcher.Run();  
-                }                
-            }
+
+            
 
 
-
-            if (numOfRunsTB.Text != "")
+            if (numOfRunsTB.Text != "" && !nightWin.doIExist)
             {              
-                Thread nightThread = new Thread(new ThreadStart(ThreadProc));
-
-                Console.WriteLine(nightThread.ManagedThreadId);
-
-
-
-                nightThread.SetApartmentState(ApartmentState.STA);
-                nightThread.Name = "iExist";
-                //nightThread.IsBackground = true;
 
                 
-                nightThread.Start();
-                
-                
+                nightWinInstance.Owner = this;
+                nightWinInstance.Show();
+                nightWinInstance.numberOfRuns = numOfRunsTB.Text;
 
-                
-
-                nightWin nightWinTransferVariable = new nightWin();
-                nightWinTransferVariable.numberOfRuns = numOfRunsTB.Text;
 
                 DateTime startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
@@ -417,7 +394,6 @@ namespace WpfApp2
             //this.Close();
             //need to abort or shut down all threads or like deal with this child parent window relationship that im about to make
 
-            // TODO: something here needs to change
 
             //Console.WriteLine(Thread.CurrentThread.Name);
 

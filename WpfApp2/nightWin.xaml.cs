@@ -26,19 +26,31 @@ namespace WpfApp2
         Utilities utilities = new Utilities();
         private KeyboardInput globalKeyboard;
 
+        public static bool doIExist = false;
+
         public nightWin()
         {
             InitializeComponent();
 
+            
 
 
             globalKeyboard = new KeyboardInput();
             globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
 
-            AddLine("Hello");
+            imRUNNING();
+            
 
         }
 
+        private async void imRUNNING()
+        {
+            for (int i = 0; i<1000; i++)
+            {
+                await Task.Delay(100);
+                AddLine($"Hello {i}");
+            }
+        }
 
 
         private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
@@ -59,9 +71,9 @@ namespace WpfApp2
                 //AddLine("nope, I actually just ended the dispatcher");
 
 
-                //this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
+                this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
 
-                Utilities.leftMouseClick(658, 430);
+                //Utilities.leftMouseClick(658, 430);
                 //Utilities.SetCursorPos(658, 430);
 
             }
@@ -256,7 +268,7 @@ namespace WpfApp2
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Console.WriteLine("ima take out the trash (i.e. dispose key-logger bro)");
+            Console.WriteLine("ima take out the trash (i.e. dispose key-log and GC)");
             globalKeyboard.Dispose();
 
             GC.Collect();
@@ -265,12 +277,15 @@ namespace WpfApp2
 
 
 
-            Utilities.thebigMUTEXboi.ReleaseMutex();
-
             //MainWindow blah = new MainWindow();
             //blah.nightThread.Abort();
 
 
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            doIExist = true;
         }
     }
 }

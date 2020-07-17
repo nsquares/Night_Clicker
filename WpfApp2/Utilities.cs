@@ -12,7 +12,6 @@ namespace WpfApp2
 {
     class Utilities
     {
-        public static Mutex thebigMUTEXboi = new Mutex();
 
 
         [StructLayout(LayoutKind.Sequential)]

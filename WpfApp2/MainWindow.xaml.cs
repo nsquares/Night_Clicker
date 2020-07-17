@@ -245,17 +245,25 @@ namespace WpfApp2
 
                 nightThread.SetApartmentState(ApartmentState.STA);
                 nightThread.Name = "iExist";
-                //nightThread.IsBackground = true;
+                nightThread.IsBackground = true;
 
                 
                 nightThread.Start();
                 
                 
 
-                
+                //TODO: fix this stuff below me
 
-                nightWin nightWinTransferVariable = new nightWin();
-                nightWinTransferVariable.numberOfRuns = numOfRunsTB.Text;
+                //nightWin nightWinTransferVariable = new nightWin();            //THIS CREATES A NEW INSTANCE OF THE WINDOW THAT NEEDS AND WILL BE CLOSED AT app shutdown
+                //nightWinTransferVariable.numberOfRuns = numOfRunsTB.Text;      //^ to add on to this, the if statement in Window_Closed in nightWin was written because of this instance
+
+                //so i do not know if i am worrying too much but i think all the threads will be shutdowned when the app shuts down so i do not think i need to find a way to exit these threads, then again they should exit so the nightRun() method stops working so idk
+                //this is why i am shelving this
+
+
+
+
+
 
                 DateTime startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
@@ -417,17 +425,15 @@ namespace WpfApp2
             //this.Close();
             //need to abort or shut down all threads or like deal with this child parent window relationship that im about to make
 
-            // TODO: something here needs to change
-
             //Console.WriteLine(Thread.CurrentThread.Name);
 
 
 
             //GCCollectionMode.Forced
 
-            //Utilities.thebigMUTEXboi.Close();
+            Utilities.thebigMUTEXboi.Close();
 
-            //Utilities.thebigMUTEXboi.Dispose();
+            Utilities.thebigMUTEXboi.Dispose();
 
             System.Windows.Application.Current.Shutdown();
         }

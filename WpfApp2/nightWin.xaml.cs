@@ -264,9 +264,11 @@ namespace WpfApp2
             GC.WaitForPendingFinalizers();
 
 
-
-            Utilities.thebigMUTEXboi.ReleaseMutex();
-
+            if (this.IsLoaded)
+            {
+                Utilities.thebigMUTEXboi.ReleaseMutex();  
+                Console.WriteLine("did i do it?");
+            }           
             //MainWindow blah = new MainWindow();
             //blah.nightThread.Abort();
 

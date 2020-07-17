@@ -229,7 +229,7 @@ namespace WpfApp2
                 if (Utilities.thebigMUTEXboi.WaitOne(0, true))
                 {
                     nightWinForThread.Show();
-                    System.Windows.Threading.Dispatcher.Run();  // what is the point of this?
+                    System.Windows.Threading.Dispatcher.Run();  
                 }                
             }
 
@@ -238,9 +238,19 @@ namespace WpfApp2
             if (numOfRunsTB.Text != "")
             {              
                 Thread nightThread = new Thread(new ThreadStart(ThreadProc));
+
+                Console.WriteLine(nightThread.ManagedThreadId);
+
+
+
                 nightThread.SetApartmentState(ApartmentState.STA);
-                nightThread.IsBackground = true;
+                nightThread.Name = "iExist";
+                //nightThread.IsBackground = true;
+
+                
                 nightThread.Start();
+                
+                
 
                 
 
@@ -397,17 +407,28 @@ namespace WpfApp2
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+ 
+
+        private void Window_Closed(object sender, EventArgs e)
         {
             //nightWin.Close();       //set owner properties on nightWin to be owned by MainWindow so that it closes automattcailly when Main window closes
 
 
             //this.Close();
             //need to abort or shut down all threads or like deal with this child parent window relationship that im about to make
-            
+
             // TODO: something here needs to change
-            
-            Console.WriteLine(Thread.CurrentThread.Name);
+
+            //Console.WriteLine(Thread.CurrentThread.Name);
+
+
+
+            //GCCollectionMode.Forced
+
+            //Utilities.thebigMUTEXboi.Close();
+
+            //Utilities.thebigMUTEXboi.Dispose();
+
             System.Windows.Application.Current.Shutdown();
         }
 

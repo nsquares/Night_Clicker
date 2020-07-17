@@ -30,8 +30,12 @@ namespace WpfApp2
         {
             InitializeComponent();
 
+
+
             globalKeyboard = new KeyboardInput();
             globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
+
+            AddLine("Hello");
 
         }
 
@@ -132,8 +136,6 @@ namespace WpfApp2
                             return;
                         }
                     }
-
-
                 }
                 else
                 {
@@ -256,7 +258,19 @@ namespace WpfApp2
         {
             Console.WriteLine("ima take out the trash (i.e. dispose key-logger bro)");
             globalKeyboard.Dispose();
-            Utilities.thebigMUTEXboi.ReleaseMutex();            
+
+            GC.Collect();
+
+            GC.WaitForPendingFinalizers();
+
+
+
+            Utilities.thebigMUTEXboi.ReleaseMutex();
+
+            //MainWindow blah = new MainWindow();
+            //blah.nightThread.Abort();
+
+
         }
     }
 }

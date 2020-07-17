@@ -13,5 +13,20 @@ namespace WpfApp2
     /// </summary>
     public partial class App : Application
     {
+        [STAThread]
+        public static void Main()
+        {
+            App app = new App();
+            app.InitializeComponent();
+
+            app.Run();
+
+            //one thread for mainWindow 
+
+            //another for nightWin
+
+            //or maybe only nightWin.join() here 
+        }
+
     }
 }

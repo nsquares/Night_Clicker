@@ -24,51 +24,15 @@ namespace WpfApp2
         // for static methods, 
 
         Utilities utilities = new Utilities();
-        private KeyboardInput globalKeyboard;
+        //private KeyboardInput globalKeyboard;
 
         public nightWin()
         {
             InitializeComponent();
 
-
-
-            globalKeyboard = new KeyboardInput();
-            globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
-
             AddLine("Hello");
 
         }
-
-
-
-        private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
-        {
-            if (Keyboard.IsKeyDown(Key.RightShift) && this.IsLoaded)
-            {
-                //pleaseStop = true;
-                //AddLine("Right_shift has been pressed, thats all I do right now");
-
-                /*
-                using (nightButton.Dispatcher.DisableProcessing())                      //all this can do is pause the run and resume after the brackets execute fully
-                {
-                    AddLine("please stop but dont exit");
-                }
-                */
-
-                //nightButton.Dispatcher.BeginInvokeShutdown(DispatcherPriority.Normal);  // I might as well just go this.Close()
-                //AddLine("nope, I actually just ended the dispatcher");
-
-
-                //this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
-
-                Utilities.leftMouseClick(658, 430);
-                //Utilities.SetCursorPos(658, 430);
-
-            }
-            //throw new NotImplementedException();
-            //AddLine("this is it");            
-        }
-
 
 
 
@@ -256,15 +220,15 @@ namespace WpfApp2
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Console.WriteLine("ima take out the trash (i.e. dispose key-logger bro)");
-            globalKeyboard.Dispose();
+            Console.WriteLine("ima take out the trash (i.e. GC & release Mutex)");
+            
 
             GC.Collect();
 
             GC.WaitForPendingFinalizers();
 
 
-            if (this.IsLoaded)
+            if (this.IsLoaded)  //so the window is still "loaded" while it runs this event method, epic
             {
                 Utilities.thebigMUTEXboi.ReleaseMutex();  
                 Console.WriteLine("did i do it?");

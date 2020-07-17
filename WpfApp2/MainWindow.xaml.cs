@@ -28,10 +28,12 @@ namespace WpfApp2
 
 
         Utilities utilities = new Utilities();
+        nightWin nightWinUhhh = new nightWin();
 
+        private KeyboardInput globalKeyboard;
 
         // is this how I can get keyboard input globally?
-        
+
 
 
         TextBox[,] allTBInput;
@@ -39,8 +41,9 @@ namespace WpfApp2
 
         DispatcherTimer Timer = new DispatcherTimer();
 
-        private delegate void NightRunDelegate();
+        //private delegate void NightRunDelegate();
 
+        Thread nightThread = new Thread(new ThreadStart(ThreadProc));
 
         public MainWindow()
         {
@@ -69,9 +72,63 @@ namespace WpfApp2
 
             AddLine($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
 
-  
+
+            globalKeyboard = new KeyboardInput();
+            globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
+
+
+            nightThread.SetApartmentState(ApartmentState.STA);
+            nightThread.Name = "BRRUUUHHHH";
+            nightThread.IsBackground = true;
+
         }
 
+
+
+        
+
+        static void ThreadProc()
+        {
+            nightWin nightWinForThread = new nightWin();
+            if (Utilities.thebigMUTEXboi.WaitOne(0, true))
+            {
+                nightWinForThread.Show();
+                System.Windows.Threading.Dispatcher.Run();
+            }
+        }
+
+        private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
+        {
+            Console.WriteLine(nightThread.ThreadState);
+            if (Keyboard.IsKeyDown(Key.RightShift))
+            {
+                //pleaseStop = true;
+                //AddLine("Right_shift has been pressed, thats all I do right now");
+
+                /*
+                using (nightButton.Dispatcher.DisableProcessing())                      //all this can do is pause the run and resume after the brackets execute fully
+                {
+                    AddLine("please stop but dont exit");
+                }
+                */
+
+                //nightButton.Dispatcher.BeginInvokeShutdown(DispatcherPriority.Normal);  // I might as well just go this.Close()
+                //AddLine("nope, I actually just ended the dispatcher");
+
+
+                //this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
+
+                //Utilities.leftMouseClick(658, 430);
+                //Utilities.SetCursorPos(658, 430);
+
+                //Console.WriteLine("I think it is because that nightwinUhhh is not loaded cause new instance and not on same thread........");
+                //Utilities.thebigMUTEXboi.ReleaseMutex();
+                nightThread.Abort();
+
+            }
+            //throw new NotImplementedException();
+            //AddLine("this is it");            
+        }
 
 
 
@@ -111,6 +168,7 @@ namespace WpfApp2
 
             utcLabel.Content = DateTime.UtcNow.ToLongTimeString(); //I should probably do some math on this boi to get it to reflect what in-app uses to determine what is a new day
             //can I get a utc-7 in the chat?
+            //chat: utc-7 is the one I want (plz look up because I do not think it is a simple +7 or -7 on regular UTC....)
 
 
             //DateTime.Now.Subtract(d);
@@ -203,7 +261,7 @@ namespace WpfApp2
 
 
 
-        
+
 
         private void Night_Click(object sender, RoutedEventArgs e)
         {
@@ -223,39 +281,28 @@ namespace WpfApp2
             //nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
             //nightRun();
 
-            void ThreadProc()
-            {
-                nightWin nightWinForThread = new nightWin();
-                if (Utilities.thebigMUTEXboi.WaitOne(0, true))
-                {
-                    nightWinForThread.Show();
-                    System.Windows.Threading.Dispatcher.Run();  
-                }                
-            }
+
 
 
 
             if (numOfRunsTB.Text != "")
-            {              
-                Thread nightThread = new Thread(new ThreadStart(ThreadProc));
+            {                              
 
-                Console.WriteLine(nightThread.ManagedThreadId);
+                //Console.WriteLine(nightThread.ManagedThreadId);
+
+                Console.WriteLine(nightThread.ThreadState);
 
 
-
-                nightThread.SetApartmentState(ApartmentState.STA);
-                nightThread.Name = "iExist";
-                nightThread.IsBackground = true;
-
-                
                 nightThread.Start();
-                
-                
+
+                Console.WriteLine(nightThread.ThreadState);
+
+
 
                 //TODO: fix this stuff below me
 
-                //nightWin nightWinTransferVariable = new nightWin();            //THIS CREATES A NEW INSTANCE OF THE WINDOW THAT NEEDS AND WILL BE CLOSED AT app shutdown
-                //nightWinTransferVariable.numberOfRuns = numOfRunsTB.Text;      //^ to add on to this, the if statement in Window_Closed in nightWin was written because of this instance
+                //           //THIS CREATES A NEW INSTANCE OF THE WINDOW THAT NEEDS AND WILL BE CLOSED AT app shutdown
+                nightWinUhhh.numberOfRuns = numOfRunsTB.Text;      //^ to add on to this, the if statement in Window_Closed in nightWin was written because of this instance
 
                 //so i do not know if i am worrying too much but i think all the threads will be shutdowned when the app shuts down so i do not think i need to find a way to exit these threads, then again they should exit so the nightRun() method stops working so idk
                 //this is why i am shelving this
@@ -429,7 +476,12 @@ namespace WpfApp2
 
 
 
-            //GCCollectionMode.Forced
+            //maybe uncomment the two things below me
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+
+
+            globalKeyboard.Dispose();
 
             Utilities.thebigMUTEXboi.Close();
 

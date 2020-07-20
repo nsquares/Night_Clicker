@@ -231,8 +231,9 @@ namespace WpfApp2
             }
 
 
+            Console.WriteLine($"Main Thread: {Dispatcher.Thread.Name}");
 
-                           // whut: this boolean doIExist still works even when I created a new thread so the nightWin is not completely made on the new thread but how do I do that?     
+                   // whut: this boolean doIExist still works even when I created a new thread so the nightWin is not completely made on the new thread but how do I do that?     
             if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread but I want both windows to run on unqiue and sperate threads
             {
                 Thread nightThread = new Thread(new ThreadStart(ThreadProc));

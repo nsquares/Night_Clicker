@@ -32,15 +32,10 @@ namespace WpfApp2
         {
             InitializeComponent();
 
-            
-
-
             globalKeyboard = new KeyboardInput();
             globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
 
-            imRUNNING();
-            
-
+            //pro tip: this should be treated as the main method of the window and this runs on the UI / Main thread, stuff below can run on a new thread that you create
         }
 
         private async void imRUNNING()
@@ -48,7 +43,7 @@ namespace WpfApp2
             for (int i = 0; i<1000; i++)
             {
                 await Task.Delay(250);
-                AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
+                //AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
                 //Utilities.SetCursorPos(950, 600);
 
                 Console.WriteLine($"im running {i}");
@@ -76,6 +71,8 @@ namespace WpfApp2
 
                 this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
                 //this does not end all running methods on this .cs page, this is more like a hide and the thread/worker still runs......
+                //nah this is actually undetermined until we put the looping method in a button on this window!
+
 
 
                 //Utilities.leftMouseClick(658, 430);
@@ -280,10 +277,17 @@ namespace WpfApp2
             GC.Collect();
 
             GC.WaitForPendingFinalizers();
-            
+
             //Environment.Exit(0); //ends the whole application so not this one
 
-            //Dispatcher.BeginInvokeShutdown(System.Windows.Threading.DispatcherPriority.Background);
+            Console.WriteLine(Dispatcher.Thread.Name);
+            //Dispatcher.BeginInvokeShutdown(System.Windows.Threading.DispatcherPriority.Send);  //btw, dont know if it should be syncous or asyncous but both work so
+
+            Dispatcher.InvokeShutdown();   // so the dispatcher is howamIrunning but the main method is not finishing, maybe put loop in a button / event handler and see what that does
+            
+            //cant abort here because this .cs does not know the nightThread object so only can abort on the mainWindow
+
+            
 
             
 
@@ -300,6 +304,9 @@ namespace WpfApp2
             doIExist = true;
         }
 
-
+        private void runButton_Click(object sender, RoutedEventArgs e)
+        {
+            imRUNNING();
+        }
     }
 }

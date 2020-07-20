@@ -39,6 +39,8 @@ namespace WpfApp2
 
         private delegate void NightRunDelegate();
 
+        
+
 
         public MainWindow()
         {

@@ -43,7 +43,7 @@ namespace WpfApp2
             for (int i = 0; i<1000; i++)
             {
                 await Task.Delay(250);
-                //AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
+                AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
                 //Utilities.SetCursorPos(950, 600);
 
                 Console.WriteLine($"im running {i}");
@@ -89,13 +89,18 @@ namespace WpfApp2
 
         public void AddLine(string text)
         {
+            Console.WriteLine(Dispatcher.Thread.Name);
 
-            //outputBoxNight.Dispatcher.BeginInvoke(new (() =>
+
+            outputBoxNight.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                outputBoxNight.AppendText(text);
+                outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+                outputBoxNight.ScrollToEnd();
+            }));
 
 
-            outputBoxNight.AppendText(text);
-            outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
-            outputBoxNight.ScrollToEnd();
+
 
             /*this.outputBoxNight.Dispatcher.Invoke(DispatcherPriority.Render,
                 new Action(() => {

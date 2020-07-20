@@ -47,8 +47,11 @@ namespace WpfApp2
         {
             for (int i = 0; i<1000; i++)
             {
-                await Task.Delay(100);
-                AddLine($"Hello {i}");
+                await Task.Delay(250);
+                AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
+                //Utilities.SetCursorPos(950, 600);
+
+                Console.WriteLine($"im running {i}");
             }
         }
 
@@ -72,6 +75,8 @@ namespace WpfApp2
 
 
                 this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
+                //this does not end all running methods on this .cs page, this is more like a hide and the thread/worker still runs......
+
 
                 //Utilities.leftMouseClick(658, 430);
                 //Utilities.SetCursorPos(658, 430);
@@ -88,18 +93,18 @@ namespace WpfApp2
         public void AddLine(string text)
         {
 
-            //outputBox.Dispatcher.BeginInvoke(new (() =>
+            //outputBoxNight.Dispatcher.BeginInvoke(new (() =>
 
 
-            outputBox.AppendText(text);
-            outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
-            outputBox.ScrollToEnd();
+            outputBoxNight.AppendText(text);
+            outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+            outputBoxNight.ScrollToEnd();
 
-            /*this.outputBox.Dispatcher.Invoke(DispatcherPriority.Render,
+            /*this.outputBoxNight.Dispatcher.Invoke(DispatcherPriority.Render,
                 new Action(() => {
-                    outputBox.AppendText(text);
-                    outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
-                    outputBox.ScrollToEnd();
+                    outputBoxNight.AppendText(text);
+                    outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+                    outputBoxNight.ScrollToEnd();
                 }));*/
 
         }
@@ -241,7 +246,7 @@ namespace WpfApp2
 
         public void replaceLine(string oldLine, string newLine)
         {
-            TextRange text = new TextRange(outputBox.Document.ContentStart, outputBox.Document.ContentEnd);   //select all text
+            TextRange text = new TextRange(outputBoxNight.Document.ContentStart, outputBoxNight.Document.ContentEnd);   //select all text
             TextPointer current = text.Start.GetInsertionPosition(LogicalDirection.Forward);
             while (current != null)                                                                    //cursor through like sql
             {
@@ -256,8 +261,8 @@ namespace WpfApp2
                         TextRange selection = new TextRange(selectionStart, selectionEnd);
                         selection.Text = newLine;
                         selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
-                        outputBox.Selection.Select(selection.Start, selection.End);                      // this is used to update
-                        //outputBox.Focus();   not needed really i think
+                        outputBoxNight.Selection.Select(selection.Start, selection.End);                      // this is used to update
+                        //outputBoxNight.Focus();   not needed really i think
                     }
                 }
                 current = current.GetNextContextPosition(LogicalDirection.Forward);
@@ -275,6 +280,12 @@ namespace WpfApp2
             GC.Collect();
 
             GC.WaitForPendingFinalizers();
+            
+            //Environment.Exit(0); //ends the whole application so not this one
+
+            //Dispatcher.BeginInvokeShutdown(System.Windows.Threading.DispatcherPriority.Background);
+
+            
 
 
 

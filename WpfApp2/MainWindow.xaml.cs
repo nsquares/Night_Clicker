@@ -221,17 +221,28 @@ namespace WpfApp2
             //nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
             //nightRun();
 
-
-            
-
-
-            if (numOfRunsTB.Text != "" && !nightWin.doIExist)
+            void ThreadProc()
             {
                 nightWin nightWinInstance = new nightWin();
-
-                nightWinInstance.Owner = this;
+                //nightWinInstance.Owner = this;
                 nightWinInstance.Show();
-                nightWinInstance.numberOfRuns = numOfRunsTB.Text;
+                System.Windows.Threading.Dispatcher.Run();
+                //nightWinInstance.numberOfRuns = numOfRunsTB.Text;
+            }
+
+
+
+                           // whut: this boolean doIExist still works even when I created a new thread so the nightWin is not completely made on the new thread but how do I do that?     
+            if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread but I want both windows to run on unqiue and sperate threads
+            {
+                Thread nightThread = new Thread(new ThreadStart(ThreadProc));
+
+                nightThread.SetApartmentState(ApartmentState.STA);
+                nightThread.Name = "hOwAmIrUnNiNg";
+                nightThread.IsBackground = true;
+
+                nightThread.Start();
+
 
 
                 DateTime startTime = DateTime.Now;

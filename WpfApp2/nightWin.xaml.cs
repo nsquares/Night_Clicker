@@ -46,9 +46,7 @@ namespace WpfApp2
             {
                 await Task.Delay(250);
                 AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
-                //Utilities.SetCursorPos(950, 600);  //okay, delete comment above me because I think the reason why this happens is because I try to run this method in the main method of this page which is confirmed to be on the main thread but buttons on the window are connected to the new thread 
-                                                       //what if I try when window is loaded event handler
-
+                //Utilities.SetCursorPos(950, 600);  //okay, delete comment above me because I think the reason why this happens is because I try to run this method in the main method of this page which is confirmed to be on the main thread but buttons on the window are connected to the new thread                                                       
                 Console.WriteLine($"im running {i}");
             }
         }
@@ -57,33 +55,15 @@ namespace WpfApp2
         private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
         {
             if (Keyboard.IsKeyDown(Key.RightShift) && this.IsLoaded)
-            {
-                //pleaseStop = true;
-                //AddLine("Right_shift has been pressed, thats all I do right now");
-
+            {              
                 /*
                 using (nightButton.Dispatcher.DisableProcessing())                      //all this can do is pause the run and resume after the brackets execute fully
                 {
                     AddLine("please stop but dont exit");
                 }
-                */
-
-                //nightButton.Dispatcher.BeginInvokeShutdown(DispatcherPriority.Normal);  // I might as well just go this.Close()
-                //AddLine("nope, I actually just ended the dispatcher");
-
-
-                this.Close();  //okay, this will throw an error when releasing the mutex so im thinking of this: what if I just lock the window in place and then have this keyboard hook do a leftmouseclick() on the fricking close button on the window itself
-                //this does not end all running methods on this .cs page, this is more like a hide and the thread/worker still runs......
-                //nah this is actually undetermined until we put the looping method in a button on this window!
-
-
-
-                //Utilities.leftMouseClick(658, 430);
-                //Utilities.SetCursorPos(658, 430);
-
+                */             
+                this.Close(); 
             }
-            //throw new NotImplementedException();
-            //AddLine("this is it");            
         }
 
 
@@ -92,9 +72,7 @@ namespace WpfApp2
 
         public void AddLine(string text)
         {
-            Console.WriteLine(Dispatcher.Thread.Name);
-
-
+            //Console.WriteLine(Dispatcher.Thread.Name);
 
             outputBoxNight.AppendText(text);
             outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
@@ -250,9 +228,6 @@ namespace WpfApp2
         }
 
 
-
-
-
         public void replaceLine(string oldLine, string newLine)
         {
             TextRange text = new TextRange(outputBoxNight.Document.ContentStart, outputBoxNight.Document.ContentEnd);   //select all text
@@ -278,8 +253,6 @@ namespace WpfApp2
             }
         }
 
-
-
         private void Window_Closed(object sender, EventArgs e)
         {
             doIExist = false;
@@ -296,19 +269,12 @@ namespace WpfApp2
 
             Dispatcher.InvokeShutdown();              
             //cant abort here because this .cs does not know the nightThread object so only can abort on the mainWindow
-
-            
-
-
-            //MainWindow blah = new MainWindow();
-            //blah.nightThread.Abort();
-
-
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
             doIExist = true;
+            AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
             imRUNNING();
         }
     }

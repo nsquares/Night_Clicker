@@ -25,22 +25,14 @@ namespace WpfApp2
     /// </summary>
     public partial class MainWindow : Window
     {
-
-
         Utilities utilities = new Utilities();
-
-        
-
 
         TextBox[,] allTBInput;
         int[,] allXandYint;
 
         DispatcherTimer Timer = new DispatcherTimer();
 
-        private delegate void NightRunDelegate();
-
-        
-
+        //private delegate void NightRunDelegate();
 
         public MainWindow()
         {
@@ -72,38 +64,14 @@ namespace WpfApp2
   
         }
 
-
-
-
-
         public void AddLine(string text)
         {
-
-            //outputBox.Dispatcher.BeginInvoke(new (() =>
-
-
             outputBox.AppendText(text);
             outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
-            outputBox.ScrollToEnd();
-
-            /*this.outputBox.Dispatcher.Invoke(DispatcherPriority.Render,
-                new Action(() => {
-                    outputBox.AppendText(text);
-                    outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
-                    outputBox.ScrollToEnd();
-                }));*/
-
+            outputBox.ScrollToEnd();    
         }
 
-
-        
-
-
-
-
-
-        //int counter = 0;
-        private void Timer_Tick(object sender, EventArgs e)     //will change wpf starttime to be starttime of night_click method because finishtime is finishtime of night_click method, why even track application uptime and indirectly figure out the night run time-length?
+        private void Timer_Tick(object sender, EventArgs e)   
         {
 
             //await Task.Delay(2000);
@@ -128,7 +96,7 @@ namespace WpfApp2
 
         private void Help_Click(object sender, RoutedEventArgs e)
         {
-            //AddLine("lol");
+            AddLine("lol");
         }
 
         //maybe a daily ak run as well later on? too many variables 
@@ -200,29 +168,8 @@ namespace WpfApp2
         }
 
 
-
-
-
-        
-
         private void Night_Click(object sender, RoutedEventArgs e)
-        {
-            //pleaseStop = false;
-
-            /*         //okay, this cannot be used right now  because AddLine() / updating the UI is obviously on a different thread than this new one I just created so it bricks
-             *         //could look into this and modify more
-            Thread nightRunThread = new Thread(new ThreadStart(nightRun));
-            nightRunThread.SetApartmentState(ApartmentState.STA);
-            nightRunThread.IsBackground = true;
-            AddLine("alright im ready to start");
-            nightRunThread.Start();
-            // ---------------------------------------------------------------------------------------------- please do the /* but the ending one here because yea */
-
-            //Thread pleaseKill = new Thread(new ThreadStart());
-
-            //nightButton.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new NightRunDelegate(nightRun));
-            //nightRun();
-
+        {            
             void ThreadProc()
             {
                 nightWin nightWinInstance = new nightWin();
@@ -231,49 +178,32 @@ namespace WpfApp2
                 System.Windows.Threading.Dispatcher.Run();
                 //nightWinInstance.numberOfRuns = numOfRunsTB.Text;
             }
-
-
-            Console.WriteLine($"Main Thread: {Dispatcher.Thread.Name}");
-
-                   // whut: this boolean doIExist still works even when I created a new thread so the nightWin is not completely made on the new thread but how do I do that?     
-            if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread but I want both windows to run on unqiue and sperate threads
+                   // this boolean doIExist still works even when I created a new thread so the nightWin is not made on the new thread but is ran on the new thread
+            if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
             {
                 Thread nightThread = new Thread(new ThreadStart(ThreadProc));
 
                 nightThread.SetApartmentState(ApartmentState.STA);
-                nightThread.Name = "hOwAmIrUnNiNg";
+                nightThread.Name = "nightThread";
                 nightThread.IsBackground = true;
 
                 nightThread.Start();
 
-
-
                 DateTime startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
-
+            }
+            else if (nightWin.doIExist)
+            {
+                AddLine("Bruh, only one instance of the Night Run is allowed");
             }
             else
             {
                 //AddLine("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
                 AddLine("Oi, how many runs do you want?");
             }
-
-
-
-        } 
-        
-
-
-
-
-
-
-
-
+        }         
 
         //---------------------------------------------------------------(end of night run methods)------------------------------------------------------------------------------------------------
-
-
 
 
         private async void Color_Click(object sender, RoutedEventArgs e)
@@ -292,20 +222,11 @@ namespace WpfApp2
             Utilities.SetCursorPos(allXandYint[1, 0], allXandYint[1, 1]);
             
             AddLine("--------Finished Preview");
-
-            /*new Thread(() =>
-            {
-                //Task.Delay(250);
-                SetCursorPos(xInput1, yInput1);
-
-            }).Start();*/
         }
 
 
         private async void  CLICK(object sender, RoutedEventArgs e) 
         {
-
-            //clickingDelayTB
             AddLine("ight m8, u have 10 seconds to position the mouse starting now");
             await Task.Delay(10000);
             int gotX = (int)Utilities.GetCursorPosition().X;
@@ -403,40 +324,9 @@ namespace WpfApp2
         private void Window_Closed(object sender, EventArgs e)
         {
             //nightWin.Close();       //set owner properties on nightWin to be owned by MainWindow so that it closes automattcailly when Main window closes
-
-
-            //this.Close();
-            //need to abort or shut down all threads or like deal with this child parent window relationship that im about to make
-
-
-            //Console.WriteLine(Thread.CurrentThread.Name);
-
-
-
-            //GCCollectionMode.Forced
-
-            //Utilities.thebigMUTEXboi.Close();
-
-            //Utilities.thebigMUTEXboi.Dispose();
-
+                                      // cannot because it is on a different thread
             System.Windows.Application.Current.Shutdown();
         }
 
-
-
-
-        /*
-        private void Window_KeyDown(object sender, KeyEventArgs e) //does not work unless wpf has keyboard focus but this will never happen because I will always be clicking and focusing on other apps
-        {                                                                     //is there a way that I can have keyboard focus lock or global lock, I do not thinking a sperate thread will do it but it might since the thread is always running in the background and then figure out how to make a thread kill another thread or just how to end a specific thread, maybe put shift key on UI thread (dispatcher)?
-            
-            //order of events, I get the hook to globally monitor the keyboard, then create a new thread that will constantly run/check if the key is pressed globally, and then exit the thread that runs nightRun. Dont put anything on the UI thread and figure that out later when I know what logically should/can be on the UI thread
-            //                                                                                                               (while loop?)
-
-            if (e.Key == Key.RightShift) //Keyboard.IsKeyDown(Key.RightShift) 
-            {
-                AddLine("SHIFT DOWN");
-            }
-        }
-        */
     }
 }

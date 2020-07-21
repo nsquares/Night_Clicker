@@ -5,19 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"
-        Title="Night Run (end me by holding right shift)" Height="250" Width="500" Closed="Window_Closed" ResizeMode="NoResize" WindowStartupLocation="Manual" Left="185" Top="420" Topmost="True" Loaded="Window_Loaded">
+        Title="Night Run (force quit by pressing right-shift)" Height="300" Width="500" Closed="Window_Closed" WindowStartupLocation="Manual" Left="185" Top="420" Topmost="True" Loaded="Window_Loaded">
     <Grid>
-        <Grid.ColumnDefinitions>
-            
-        </Grid.ColumnDefinitions>
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
-        <Button Name="runButton" Click="runButton_Click" >Run</Button>
         
-        <RichTextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" Grid.RowSpan="9" FontFamily="Comic Sans MS" Foreground="White" Background="Black" BorderBrush="Black"  Name="outputBoxNight" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"  ></RichTextBox>
+        <RichTextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" Grid.RowSpan="9" FontFamily="Comic Sans MS" Foreground="White" Background="Black" BorderBrush="Black"  Name="outputBoxNight" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"></RichTextBox>
     </Grid>
 </Window>

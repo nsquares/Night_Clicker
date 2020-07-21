@@ -28,14 +28,16 @@ namespace WpfApp2
 
         public static bool doIExist = false;
 
-        public nightWin()
-        {
+        public nightWin()    //okay, so I think this is the only method which runs on the main thread and all other methods run on my custom because if I take a custom method and call it in this Main method, exception will be thrown which says object (on the UI like richtextbox) is owned or created by a different thread than this one or the Main thread
+        {                           //so it is like the main thread initializes the window and the custom thread runs or maintains it.
+                                      //objects on the UI are now owned by the custom thread in the end
             InitializeComponent();
 
             globalKeyboard = new KeyboardInput();
             globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
 
             //pro tip: this should be treated as the main method of the window and this runs on the UI / Main thread, stuff below can run on a new thread that you create
+            
         }
 
         private async void imRUNNING()
@@ -44,7 +46,8 @@ namespace WpfApp2
             {
                 await Task.Delay(250);
                 AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
-                //Utilities.SetCursorPos(950, 600);
+                //Utilities.SetCursorPos(950, 600);  //okay, delete comment above me because I think the reason why this happens is because I try to run this method in the main method of this page which is confirmed to be on the main thread but buttons on the window are connected to the new thread 
+                                                       //what if I try when window is loaded event handler
 
                 Console.WriteLine($"im running {i}");
             }
@@ -92,15 +95,19 @@ namespace WpfApp2
             Console.WriteLine(Dispatcher.Thread.Name);
 
 
+
+            outputBoxNight.AppendText(text);
+            outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+            outputBoxNight.ScrollToEnd();
+
+            /*   //okay, keep this because this does actually allow me to "cross threads", specifically between the UI / Main thread and my custom thread
             outputBoxNight.Dispatcher.BeginInvoke(new Action(() =>
             {
                 outputBoxNight.AppendText(text);
                 outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
                 outputBoxNight.ScrollToEnd();
             }));
-
-
-
+            */
 
             /*this.outputBoxNight.Dispatcher.Invoke(DispatcherPriority.Render,
                 new Action(() => {
@@ -285,17 +292,12 @@ namespace WpfApp2
 
             //Environment.Exit(0); //ends the whole application so not this one
 
-            Console.WriteLine(Dispatcher.Thread.Name);
             //Dispatcher.BeginInvokeShutdown(System.Windows.Threading.DispatcherPriority.Send);  //btw, dont know if it should be syncous or asyncous but both work so
 
-            Dispatcher.InvokeShutdown();   // so the dispatcher is howamIrunning but the main method is not finishing, maybe put loop in a button / event handler and see what that does
-            
+            Dispatcher.InvokeShutdown();              
             //cant abort here because this .cs does not know the nightThread object so only can abort on the mainWindow
 
             
-
-            
-
 
 
             //MainWindow blah = new MainWindow();
@@ -304,13 +306,9 @@ namespace WpfApp2
 
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
             doIExist = true;
-        }
-
-        private void runButton_Click(object sender, RoutedEventArgs e)
-        {
             imRUNNING();
         }
     }

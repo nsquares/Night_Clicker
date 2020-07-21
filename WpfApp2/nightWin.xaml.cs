@@ -54,7 +54,7 @@ namespace WpfApp2
 
         private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
         {
-            if (Keyboard.IsKeyDown(Key.RightShift) && this.IsLoaded)
+            if (Keyboard.IsKeyDown(Key.RightShift)) //&& this.IsLoaded
             {              
                 /*
                 using (nightButton.Dispatcher.DisableProcessing())                      //all this can do is pause the run and resume after the brackets execute fully
@@ -62,7 +62,8 @@ namespace WpfApp2
                     AddLine("please stop but dont exit");
                 }
                 */             
-                this.Close(); 
+                this.Close();
+                Console.WriteLine("this hook exists right now");
             }
         }
 
@@ -256,7 +257,15 @@ namespace WpfApp2
         private void Window_Closed(object sender, EventArgs e)
         {
             doIExist = false;
-            Console.WriteLine("ima take out the trash (i.e. dispose key-log and GC)");
+
+            /*     // so idk but this will create a new instance of the main window and then append to that new instance which is not shown, how do I refer to the main window already opened instead and then append it 
+            MainWindow windowMain = new MainWindow();
+            windowMain.Dispatcher.BeginInvoke(new Action(() => windowMain.AddLineMain("I took out the trash (i.e. dispose key-log and GC)")));
+            //windowMain.AddLineMain("I took out the trash (i.e. dispose key-log and GC)");
+            */
+
+
+
             globalKeyboard.Dispose();
 
             GC.Collect();

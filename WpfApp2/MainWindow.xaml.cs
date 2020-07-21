@@ -41,10 +41,10 @@ namespace WpfApp2
             Timer.Interval = new TimeSpan(0, 0, 1);
             Timer.Start();            
 
-            AddLine("(Origin (0,0) is top-left of the monitor)");
+            AddLineMain("(Origin (0,0) is top-left of the monitor)");
             //Task.Factory.StartNew(() =>
             //{
-            //  AddLine();
+            //  AddLineMain();
             //});
 
             allTBInput = new TextBox[,] 
@@ -59,12 +59,13 @@ namespace WpfApp2
                 { 0,0 }
             };
 
-            AddLine($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
+            AddLineMain($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
 
   
+
         }
 
-        public void AddLine(string text)
+        public void AddLineMain(string text)
         {
             outputBox.AppendText(text);
             outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
@@ -96,7 +97,7 @@ namespace WpfApp2
 
         private void Help_Click(object sender, RoutedEventArgs e)
         {
-            AddLine("lol");
+            AddLineMain("lol");
         }
 
         //maybe a daily ak run as well later on? too many variables 
@@ -148,7 +149,7 @@ namespace WpfApp2
             }
             */
 
-            AddLine("im commented out");
+            AddLineMain("im commented out");
         }       
 
         private float modifyDelayRun(float colorDelay, TextBox inputDelay, string ID)   //okay so this method has to be a return and  blueDelay = modifyRun(); has to happen for blueDelay to update successfully when used in another completely different method
@@ -161,12 +162,11 @@ namespace WpfApp2
                     colorDelay = float.Parse(inputDelay.Text);
                     colorDelay = colorDelay * 1000;
                 }
-                catch { AddLine($"I caught something wrong for {ID} delay"); }
-                AddLine($"{ID} Delay: {colorDelay} milliseconds");
+                catch { AddLineMain($"I caught something wrong for {ID} delay"); }
+                AddLineMain($"{ID} Delay: {colorDelay} milliseconds");
             }
             return colorDelay;
         }
-
 
         private void Night_Click(object sender, RoutedEventArgs e)
         {            
@@ -194,12 +194,12 @@ namespace WpfApp2
             }
             else if (nightWin.doIExist)
             {
-                AddLine("Bruh, only one instance of the Night Run is allowed");
+                AddLineMain("Bruh, only one instance of the Night Run is allowed");
             }
             else
             {
-                //AddLine("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
-                AddLine("Oi, how many runs do you want?");
+                //AddLineMain("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
+                AddLineMain("Oi, how many runs do you want?");
             }
         }         
 
@@ -210,9 +210,9 @@ namespace WpfApp2
         {
             getInput(allXandYint, allTBInput);
             Utilities.SetCursorPos(allXandYint[0, 0], allXandYint[0, 1]);
-            AddLine(utilities.GetColorAt(allXandYint[0, 0], allXandYint[0, 1]).ToString());
+            AddLineMain(utilities.GetColorAt(allXandYint[0, 0], allXandYint[0, 1]).ToString());
             await Task.Delay(500);
-            AddLine("I do nothing rn but check color");
+            AddLineMain("I do nothing rn but check color");
         }
         private async void Preview_Click(object sender, RoutedEventArgs e)   
         {
@@ -221,13 +221,13 @@ namespace WpfApp2
             await Task.Delay(500);
             Utilities.SetCursorPos(allXandYint[1, 0], allXandYint[1, 1]);
             
-            AddLine("--------Finished Preview");
+            AddLineMain("--------Finished Preview");
         }
 
 
         private async void  CLICK(object sender, RoutedEventArgs e) 
         {
-            AddLine("ight m8, u have 10 seconds to position the mouse starting now");
+            AddLineMain("ight m8, u have 10 seconds to position the mouse starting now");
             await Task.Delay(10000);
             int gotX = (int)Utilities.GetCursorPosition().X;
             int gotY = (int)Utilities.GetCursorPosition().Y;
@@ -239,11 +239,11 @@ namespace WpfApp2
                 try { ogDelay = Int32.Parse(clickingDelayTB.Text); }                
                 catch
                 {
-                    AddLine("bruh, did you say something? Ima just delay the c l i c k i n g by 300ms");
+                    AddLineMain("bruh, did you say something? Ima just delay the c l i c k i n g by 300ms");
                     ogDelay = 300;
                 }
             }
-            AddLine($"I got delay: {ogDelay} ms");
+            AddLineMain($"I got delay: {ogDelay} ms");
 
 
 
@@ -252,23 +252,23 @@ namespace WpfApp2
                 try { numOfClicks = Int32.Parse(numOfClicksTB.Text); }
                 catch
                 {
-                    AddLine("bruh, did you say something? Ima just loop 10,000,000");
+                    AddLineMain("bruh, did you say something? Ima just loop 10,000,000");
                     numOfClicks = 10000000;
                 }
             }
-            AddLine($"I got the order to click: {numOfClicks} times");
+            AddLineMain($"I got the order to click: {numOfClicks} times");
 
 
 
             if (infinityCB.IsChecked == true)
             {
-                AddLine("infinnnnnnnniiiiiiiiiiiiiiiittttttttttttty");
+                AddLineMain("infinnnnnnnniiiiiiiiiiiiiiiittttttttttttty");
                 for (int i = 0; i > -1; i++)
                 {
                     if (Keyboard.IsKeyDown(Key.RightShift)) { break; }
                     await Task.Delay(ogDelay);
                     Utilities.leftMouseClick(gotX, gotY);
-                    AddLine($"Click number {i+1}");
+                    AddLineMain($"Click number {i+1}");
                 }
             }
             else
@@ -281,7 +281,7 @@ namespace WpfApp2
                 }
             }
            
-            AddLine("------Finished c l i c k i n g");
+            AddLineMain("------Finished c l i c k i n g");
         }
 
 
@@ -304,17 +304,17 @@ namespace WpfApp2
                         intArray[i, 0] += Int32.Parse(TBarray[i, 0].Text);
                         intArray[i, 1] += Int32.Parse(TBarray[i, 1].Text);
 
-                        AddLine($"Received from {TBarray[i, 0].Name}: {intArray[i, 0]}");
-                        AddLine($"Received from {TBarray[i, 1].Name}: {intArray[i, 1]}");
+                        AddLineMain($"Received from {TBarray[i, 0].Name}: {intArray[i, 0]}");
+                        AddLineMain($"Received from {TBarray[i, 1].Name}: {intArray[i, 1]}");
                     }
                     catch
                     {
-                        AddLine("I need only an integer in the boxes");
+                        AddLineMain("I need only an integer in the boxes");
                     }
                 }
                 else
                 {
-                    AddLine($"Row {TBarray[i, 0].Name} or/and {TBarray[i, 1].Name} is blank");
+                    AddLineMain($"Row {TBarray[i, 0].Name} or/and {TBarray[i, 1].Name} is blank");
                 }
             }
         }
@@ -328,5 +328,38 @@ namespace WpfApp2
             System.Windows.Application.Current.Shutdown();
         }
 
+        private void Window_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+           
+        }
+
+        private void Window_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
+
+        private void Window_LayoutUpdated(object sender, EventArgs e)
+        {
+            if (shutDownCB.IsChecked == true)
+            {
+                
+            }
+            
+        }
+
+        private void Window_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Window_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            AddLineMain("i have the focus");
+        }
     }
 }

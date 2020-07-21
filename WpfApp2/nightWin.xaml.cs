@@ -24,9 +24,10 @@ namespace WpfApp2
         // for static methods, 
 
         Utilities utilities = new Utilities();
+        ShiftEvent shift = new ShiftEvent();
         private KeyboardInput globalKeyboard;
 
-        public static bool doIExist = false;
+        //public static bool doIExist = false;  //have been moved
 
         public nightWin()    //okay, so I think this is the only method which runs on the main thread and all other methods run on my custom because if I take a custom method and call it in this Main method, exception will be thrown which says object (on the UI like richtextbox) is owned or created by a different thread than this one or the Main thread
         {                           //so it is like the main thread initializes the window and the custom thread runs or maintains it.
@@ -63,7 +64,6 @@ namespace WpfApp2
                 }
                 */             
                 this.Close();
-                Console.WriteLine("this hook exists right now");
             }
         }
 
@@ -254,9 +254,10 @@ namespace WpfApp2
             }
         }
 
+        
         private void Window_Closed(object sender, EventArgs e)
         {
-            doIExist = false;
+            shift.switchTime();
 
             /*     // so idk but this will create a new instance of the main window and then append to that new instance which is not shown, how do I refer to the main window already opened instead and then append it 
             MainWindow windowMain = new MainWindow();
@@ -282,7 +283,7 @@ namespace WpfApp2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
-            doIExist = true;
+            shift.switchTime();
             AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
             imRUNNING();
         }

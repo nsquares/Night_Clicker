@@ -26,6 +26,7 @@ namespace WpfApp2
     public partial class MainWindow : Window
     {
         Utilities utilities = new Utilities();
+        ShiftEvent shift;
 
         TextBox[,] allTBInput;
         int[,] allXandYint;
@@ -39,7 +40,11 @@ namespace WpfApp2
             InitializeComponent();
             Timer.Tick += new EventHandler(Timer_Tick);
             Timer.Interval = new TimeSpan(0, 0, 1);
-            Timer.Start();            
+            Timer.Start();
+
+            shift = new ShiftEvent();
+            shift.RaiseCustomEvent += shift_HandleEvent;
+
 
             AddLineMain("(Origin (0,0) is top-left of the monitor)");
             //Task.Factory.StartNew(() =>
@@ -63,6 +68,13 @@ namespace WpfApp2
 
   
 
+        }
+
+
+        private void shift_HandleEvent(object sender, EventArgs e)
+        {
+            Console.WriteLine("\n\n\n\n\n\n\n I am being handled \n\n\n\n\n\n\n");
+            AddLineMain("bruh");
         }
 
         public void AddLineMain(string text)
@@ -170,6 +182,7 @@ namespace WpfApp2
 
         private void Night_Click(object sender, RoutedEventArgs e)
         {            
+
             void ThreadProc()
             {
                 nightWin nightWinInstance = new nightWin();
@@ -179,7 +192,7 @@ namespace WpfApp2
                 //nightWinInstance.numberOfRuns = numOfRunsTB.Text;
             }
                    // this boolean doIExist still works even when I created a new thread so the nightWin is not made on the new thread but is ran on the new thread
-            if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
+            if (numOfRunsTB.Text != "" && !ShiftEvent.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
             {
                 Thread nightThread = new Thread(new ThreadStart(ThreadProc));
 
@@ -192,7 +205,7 @@ namespace WpfApp2
                 DateTime startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
             }
-            else if (nightWin.doIExist)
+            else if (ShiftEvent.doIExist)
             {
                 AddLineMain("Bruh, only one instance of the Night Run is allowed");
             }

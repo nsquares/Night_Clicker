@@ -178,11 +178,16 @@ namespace WpfApp2
             void ThreadProc()          //this is ran by the nightThread
             {
                 nightWin nightWinInstance = new nightWin();
-                //nightWinInstance.Owner = this;
+                //nightWinInstance.Owner = this;              //this calls both threads so cannot be in dispatcher as well
+
+                Dispatcher.BeginInvoke(new Action(() =>
+                {                    
+                    nightWinInstance.numberOfRuns = numOfRunsTB.Text;
+                }));
+                
                 nightWinInstance.Show();
                 System.Windows.Threading.Dispatcher.Run();
-                //nightWinInstance.numberOfRuns = numOfRunsTB.Text;
-
+                          
                 Dispatcher.BeginInvoke(new Action(() => 
                 {
                     AddLineMain($"The thread has ended at {DateTime.Now.ToLongTimeString()}");

@@ -43,9 +43,9 @@ namespace WpfApp2
             
         }
 
-        private async void imRUNNING()
+        private async void imRUNNING()  //method that simulates random work, delete after adventure is done
         {
-            for (int i = 0; i<1000; i++)
+            for (int i = 0; i< Int32.Parse(numberOfRuns); i++)
             {
                 await Task.Delay(250);
                 AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
@@ -286,6 +286,7 @@ namespace WpfApp2
         {
             AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
             imRUNNING();
+
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"        
-        Title="C l i c k" Height="500" Width="710" MinHeight="500" MinWidth="710" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" > 
+        Title="C l i c k" Height="500" Width="720" MinHeight="500" MinWidth="720" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" > 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -219,7 +219,7 @@
         <TextBlock Grid.Column="5" Grid.Row="7" Grid.RowSpan="3" Text="___Real-Time___" Margin="0,15,0,0" TextDecorations="Underline" Background="Honeydew"/>
         <Label Grid.Column="5" Grid.Row="8" Name="timeLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
         <Label Grid.Column="5" Grid.Row="9" Name="utcLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
-        <Label Grid.Column="6" Grid.Row="9" Content="UTC" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <Label Grid.Column="6" Grid.Row="9" Content="UTC-7" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,11 +92,13 @@ namespace WpfApp2
         }
 
 
-        public float blueDelay = 1500;    //you can modify these while running the application
-        public float redDelay = 1500;     //there is no point but will keep as variables
+        public float blueDelay = 2000;    //you can modify these while running the application
+        public float redDelay = 2000;     //there is no point but will keep as variables
         public float whiteDelay = 4000;
 
         public string numberOfRuns = "";
+        public static DateTime endTime;
+        public bool logTime = false;
 
         private async void nightRun()
         {
@@ -122,7 +125,7 @@ namespace WpfApp2
                 Utilities.SetCursorPos(x, y);                
                 AddLine($"Checking {whatColor} button now");
 
-                for (int j = 0; j < 250; j++) //last for max 25 minutes even  //actually I do not know because the delay can change
+                for (int j = 0; j < 300; j++) //last for max 10 minutes even  //actually I do not know for sure because the delay can change
                 { 
                     if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
                     {
@@ -136,7 +139,7 @@ namespace WpfApp2
                         {
                             if (utilities.GetColorAt(x, y).ToString() != colorHex)
                             {
-                                AddLine($"{utilities.GetColorAt(x, y).ToString()} has disappeared)");          //feedback
+                                AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");          //feedback
                                 AddLine($"Delay for {delay / 1000} seconds before clicking");
                                 await Task.Delay(delay);
                                 Utilities.leftMouseClick(x, y);
@@ -168,6 +171,14 @@ namespace WpfApp2
 
             if (numberOfRuns != "")          //user must input the number of runs for the for loop to run through for any of this to work
             {
+                AddLine("Starting in 3 seconds:");
+                AddLine("3");
+                await Task.Delay(1000);
+                AddLine("2");
+                await Task.Delay(1000);
+                AddLine("1");
+                await Task.Delay(1000);
+
                 // wait what happens if it cannot be parsed?
                 for (int i = 0; i < Int32.Parse(numberOfRuns); i++) //will do however much based on input
                 {
@@ -180,7 +191,11 @@ namespace WpfApp2
                     await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
                     await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
                 }
+                logTime = true;
+                endTime = DateTime.Now;
                 AddLine("---------All Knight Runs Finished");
+
+
 
                 /*
                 if (shutDownCB.IsChecked == true)

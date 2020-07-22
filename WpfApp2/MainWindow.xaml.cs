@@ -41,9 +41,6 @@ namespace WpfApp2
             Timer.Interval = new TimeSpan(0, 0, 1);
             Timer.Start();
 
-
-
-
             AddLineMain("(Origin (0,0) is top-left of the monitor)");
             //Task.Factory.StartNew(() =>
             //{
@@ -65,8 +62,6 @@ namespace WpfApp2
             AddLineMain($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
         }
 
-
-
         public void AddLineMain(string text)
         {
             outputBox.AppendText(text);
@@ -76,26 +71,10 @@ namespace WpfApp2
 
         private void Timer_Tick(object sender, EventArgs e)   
         {
-
-            //await Task.Delay(2000);
             timeLabel.Content = DateTime.Now.ToLongTimeString();
-
-            utcLabel.Content = DateTime.UtcNow.ToLongTimeString(); //I should probably do some math on this boi to get it to reflect what in-app uses to determine what is a new day
-            //can I get a utc-7 in the chat?
-
-
-            //DateTime.Now.Subtract(d);
-
-            //counter++;
-
-            //DateTime.UtcNow
-            //d.TimeOfDay
-            //timeLabel.Content = d.Kind; //this outputs local so thats good
-            //timeLabel.Content = d.Hour + ": " + d.Minute + ": " + d.Second;   =   DateTime.Now.ToLongTimeString();
+            utcLabel.Content = DateTime.UtcNow.AddHours(-7).ToLongTimeString();
         }
         
-
-
 
         private void Help_Click(object sender, RoutedEventArgs e)
         {
@@ -191,8 +170,10 @@ namespace WpfApp2
                 Dispatcher.BeginInvoke(new Action(() => 
                 {
                     AddLineMain($"The thread has ended at {DateTime.Now.ToLongTimeString()}");
-                    finishLabel.Content = DateTime.Now.ToLongTimeString();
-                    finishLabel.Content = DateTime.Now.Subtract(startTime);
+                    if (nightWinInstance.logTime)
+                    {
+                        finishLabel.Content = nightWin.endTime - startTime;
+                    }                    
                 }));                
             }
 

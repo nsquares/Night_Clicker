@@ -25,7 +25,7 @@ namespace WpfApp2
         // for static methods, 
 
         Utilities utilities = new Utilities();
-        ShiftEvent shift = new ShiftEvent();
+        public static bool doIExist = false;
 
         private KeyboardInput globalKeyboard;
 
@@ -221,7 +221,7 @@ namespace WpfApp2
 
                 }
 
-                finishLabel.Content = DateTime.Now.Subtract(startTime);
+                
 
 
 
@@ -259,15 +259,14 @@ namespace WpfApp2
         
         private void Window_Closed(object sender, EventArgs e)
         {
-            shift.switchTime();
+            doIExist = false;
 
             /*     // so idk but this will create a new instance of the main window and then append to that new instance which is not shown, how do I refer to the main window already opened instead and then append it 
             MainWindow windowMain = new MainWindow();
             windowMain.Dispatcher.BeginInvoke(new Action(() => windowMain.AddLineMain("I took out the trash (i.e. dispose key-log and GC)")));
             //windowMain.AddLineMain("I took out the trash (i.e. dispose key-log and GC)");
             */
-
-
+            
 
             globalKeyboard.Dispose();
 
@@ -285,7 +284,6 @@ namespace WpfApp2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
-            //ShiftEvent.switchTime();
             AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
             imRUNNING();
         }

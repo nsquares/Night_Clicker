@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"        
-        Title="C l i c k" Height="500" Width="710" MinHeight="500" MinWidth="710" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" FocusableChanged="Window_FocusableChanged"> 
+        Title="C l i c k" Height="500" Width="710" MinHeight="500" MinWidth="710" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" > 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>

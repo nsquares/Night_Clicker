@@ -26,7 +26,6 @@ namespace WpfApp2
     public partial class MainWindow : Window
     {
         Utilities utilities = new Utilities();
-        ShiftEvent shift;
 
         TextBox[,] allTBInput;
         int[,] allXandYint;
@@ -42,8 +41,7 @@ namespace WpfApp2
             Timer.Interval = new TimeSpan(0, 0, 1);
             Timer.Start();
 
-            shift = new ShiftEvent();
-            shift.RaiseCustomEvent += shift_HandleEvent;
+
 
 
             AddLineMain("(Origin (0,0) is top-left of the monitor)");
@@ -65,17 +63,9 @@ namespace WpfApp2
             };
 
             AddLineMain($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
-
-  
-
         }
 
 
-        private void shift_HandleEvent(object sender, EventArgs e)
-        {
-            Console.WriteLine("\n\n\n\n\n\n\n I am being handled \n\n\n\n\n\n\n");
-            AddLineMain("bruh");
-        }
 
         public void AddLineMain(string text)
         {
@@ -163,7 +153,7 @@ namespace WpfApp2
 
             AddLineMain("im commented out");
         }       
-
+        /*
         private float modifyDelayRun(float colorDelay, TextBox inputDelay, string ID)   //okay so this method has to be a return and  blueDelay = modifyRun(); has to happen for blueDelay to update successfully when used in another completely different method
         {
             //trying to go from float in seconds to int in miliseconds
@@ -179,20 +169,29 @@ namespace WpfApp2
             }
             return colorDelay;
         }
+        */
 
+
+        static DateTime startTime; //this has to be a global, dont move this
         private void Night_Click(object sender, RoutedEventArgs e)
-        {            
-
-            void ThreadProc()
+        {
+            void ThreadProc()          //this is ran by the nightThread
             {
                 nightWin nightWinInstance = new nightWin();
                 //nightWinInstance.Owner = this;
                 nightWinInstance.Show();
                 System.Windows.Threading.Dispatcher.Run();
                 //nightWinInstance.numberOfRuns = numOfRunsTB.Text;
+
+                Dispatcher.BeginInvoke(new Action(() => 
+                {
+                    AddLineMain($"The thread has ended at {DateTime.Now.ToLongTimeString()}");
+                    finishLabel.Content = DateTime.Now.ToLongTimeString();
+                    finishLabel.Content = DateTime.Now.Subtract(startTime);
+                }));                
             }
                    // this boolean doIExist still works even when I created a new thread so the nightWin is not made on the new thread but is ran on the new thread
-            if (numOfRunsTB.Text != "" && !ShiftEvent.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
+            if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
             {
                 Thread nightThread = new Thread(new ThreadStart(ThreadProc));
 
@@ -202,18 +201,18 @@ namespace WpfApp2
 
                 nightThread.Start();
 
-                DateTime startTime = DateTime.Now;
+                startTime = DateTime.Now;
                 startLabel.Content = startTime.ToLongTimeString();
 
-                shift.switchTime();
+                nightWin.doIExist = true;
+                AddLineMain($"The thread '{nightThread.Name}' has succesfully initialized at {DateTime.Now.ToLongTimeString()}");
             }
-            else if (ShiftEvent.doIExist)
+            else if (nightWin.doIExist)
             {
                 AddLineMain("Bruh, only one instance of the Night Run is allowed");
             }
             else
             {
-                //AddLineMain("I should stop putting logic code inside code behind for the UI window and in turn, run it on the UI thread and take processing power");
                 AddLineMain("Oi, how many runs do you want?");
             }
         }         
@@ -343,76 +342,8 @@ namespace WpfApp2
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void Window_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-           
-        }
 
-        private void Window_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            
-        }
-
-        private void Window_LayoutUpdated(object sender, EventArgs e)
-        {
-            if (shutDownCB.IsChecked == true)
-            {
-                
-            }
-            
-        }
-
-        private void Window_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-            
-        }
-
-        private void Window_ContentRendered(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void Window_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            AddLineMain("i have the focus");
-        }
     }
 
-    public class ShiftEvent    //source 'https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/events/how-to-publish-events-that-conform-to-net-framework-guidelines'
-    {
-        public event EventHandler<EventArgs> RaiseCustomEvent;
-        public static bool doIExist = false;
-
-        public ShiftEvent()
-        {
-            //switchTime();
-
-            // Write some code that does something useful here
-            // then raise the event. You can also raise an event
-            // before you execute a block of code.
-
-        }
-        public void switchTime()
-        {
-            if (doIExist)
-            {
-                doIExist = false;
-                Console.WriteLine("\n\n\n\n\n\n\n SWITCH OFF \n\n\n\n\n\n\n");
-            }
-            else
-            {
-                doIExist = true;
-                Console.WriteLine("\n\n\n\n\n\n\n SWITCH ON\n\n\n\n\n\n\n");
-            }
-
-            // Event will be null if there are no subscribers
-            if (RaiseCustomEvent != null)
-            {
-                Console.WriteLine("\n\n\n\n\n\n\nHERE\n\n\n\n\n\n\n");
-                RaiseCustomEvent(this, new EventArgs());
-            }
-        }
-        // Wrap event invocations inside a protected virtual method
-        // to allow derived classes to override the event invocation behavior
-    }
+   
 }

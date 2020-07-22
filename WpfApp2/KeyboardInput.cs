@@ -29,7 +29,6 @@ namespace WpfApp2
 
             if (KeyBoardKeyPressed != null)
             {
-                Console.WriteLine("\n\n\n\n\n\n\n WHAT \n\n\n\n\n\n\n");
                 KeyBoardKeyPressed(this, new EventArgs());
             }
 

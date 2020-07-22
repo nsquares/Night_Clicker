@@ -195,6 +195,8 @@ namespace WpfApp2
                     finishLabel.Content = DateTime.Now.Subtract(startTime);
                 }));                
             }
+
+
                    // this boolean doIExist still works even when I created a new thread so the nightWin is not made on the new thread but is ran on the new thread
             if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
             {

@@ -59,7 +59,6 @@
     <Compile Include="nightWin.xaml.cs">
       <DependentUpon>nightWin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShiftEvent.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="WindowsHookHelper.cs" />
     <Page Include="MainWindow.xaml">

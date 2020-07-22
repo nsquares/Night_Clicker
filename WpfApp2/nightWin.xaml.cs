@@ -29,8 +29,6 @@ namespace WpfApp2
 
         private KeyboardInput globalKeyboard;
 
-        //public static bool doIExist = false;  //have been moved
-
         public nightWin()    //okay, so I think this is the only method which runs on the main thread and all other methods run on my custom because if I take a custom method and call it in this Main method, exception will be thrown which says object (on the UI like richtextbox) is owned or created by a different thread than this one or the Main thread
         {                           //so it is like the main thread initializes the window and the custom thread runs or maintains it.
                                       //objects on the UI are now owned by the custom thread in the end
@@ -39,8 +37,7 @@ namespace WpfApp2
             globalKeyboard = new KeyboardInput();
             globalKeyboard.KeyBoardKeyPressed += globalKeyboard_KeyBoardKeyPressed;
 
-            //pro tip: this should be treated as the main method of the window and this runs on the UI / Main thread, stuff below can run on a new thread that you create
-            
+            //pro tip: this should be treated as the main method of the window and this runs on the UI / Main thread, stuff below can run on a new thread that you create            
         }
 
         private async void imRUNNING()  //method that simulates random work, delete after adventure is done
@@ -54,13 +51,12 @@ namespace WpfApp2
             }
         }
 
-
         private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
         {
             if (Keyboard.IsKeyDown(Key.RightShift)) //&& this.IsLoaded
             {              
                 /*
-                using (nightButton.Dispatcher.DisableProcessing())                      //all this can do is pause the run and resume after the brackets execute fully
+                using (nightButton.Dispatcher.DisableProcessing())         //all this can do is pause the run and resume after the brackets execute fully
                 {
                     AddLine("please stop but dont exit");
                 }
@@ -69,13 +65,8 @@ namespace WpfApp2
             }
         }
 
-
-
-
-
         public void AddLine(string text)
         {
-            //Console.WriteLine(Dispatcher.Thread.Name);
 
             outputBoxNight.AppendText(text);
             outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
@@ -102,57 +93,12 @@ namespace WpfApp2
 
         public float blueDelay = 1500;    //you can modify these while running the application
         public float redDelay = 1500;     //there is no point but will keep as variables
-        public float whiteDelay = 5000;
+        public float whiteDelay = 4000;
 
         public string numberOfRuns = "";
 
         private async void nightRun()
         {
-            AddLine("To end the Night Run, move the mouse or hold the right shift key");
-            bool mouseShok = false;
-
-
-            async Task oneClick(int x, int y, int delay, string colorHex, string whatColor)
-            {
-                AddLine($"Delay for {delay / 1000} seconds then click _{whatColor.ToUpper()}_ button");    //delete this 
-                Utilities.SetCursorPos(x, y);
-                await Task.Delay(delay);                                                            // and delete this once we get the global key logger working to save time
-
-                if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)      //also why do the mouseShok here when it should really be in the for loop in checkColorBeforeClicking()?
-                {
-                    AddLine($"Checking {whatColor} button now");
-
-                    for (int j = 0; j < 250; j++) //last for max 25 minutes even  //actually I do not know because the delay can change
-                    {
-                        if (Keyboard.IsKeyDown(Key.RightShift))
-                        {
-                            AddLine("Right Shift is pressed \n KEEP HOLDING");
-                            break;
-                        }
-                        await Task.Delay(delay);
-
-                        if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
-                        else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay / 1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
-
-                        if (utilities.GetColorAt(x, y).ToString() == colorHex)  //nah, its going to be clicked when a specific hex color is found at this specific pixel
-                        {
-                            AddLine(utilities.GetColorAt(x, y).ToString());          //feedback
-                            AddLine($"Delay for {delay / 1000} seconds before clicking");
-                            await Task.Delay(delay);
-                            Utilities.leftMouseClick(x, y);
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    AddLine($"Whoa, you moved the mouse before the {whatColor.ToUpper()} color check!  _m o u s e   w a s   s h a k e n_");
-                    mouseShok = true;
-                }
-            }
-
-
-
             int firstX = 1625;          //hard code all of these variables
             int firstY = 950;
 
@@ -164,44 +110,76 @@ namespace WpfApp2
 
             string blueHex = "#FFFFFFFF";  // FF005F89   (originial)
             string redHex = "#FFFFFFFF";  // FF792201   
-
             string whiteHex = "#FFFFFFFF";  // TODO: find the color of white being overlayed by the black end screen and test to see if it is always the same color on every level (is anni different than other levels because of that unique anni report rectangle in the middle of the screen)
                                             //nah nah nah, this has to be white and the boolean has to be "NOT EQUAL", the overlay randomly blurs the screen and color of blur is different for almost all stages so it does not matter
 
+
+            AddLine("To end the Night Run, move the mouse or press the right shift key");
+            bool mouseShok = false;
+
+            async Task oneClick(int x, int y, int delay, string colorHex, string whatColor)
+            {
+                Utilities.SetCursorPos(x, y);                
+                AddLine($"Checking {whatColor} button now");
+
+                for (int j = 0; j < 250; j++) //last for max 25 minutes even  //actually I do not know because the delay can change
+                { 
+                    if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
+                    {
+                        await Task.Delay(delay);
+
+                        if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
+                        else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay / 1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
+
+
+                        if (colorHex == "#FFFFFFFF")  //this is for annihaltion runs (blur is inconsistent)
+                        {
+                            if (utilities.GetColorAt(x, y).ToString() != colorHex)
+                            {
+                                AddLine($"{utilities.GetColorAt(x, y).ToString()} has disappeared)");          //feedback
+                                AddLine($"Delay for {delay / 1000} seconds before clicking");
+                                await Task.Delay(delay);
+                                Utilities.leftMouseClick(x, y);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (utilities.GetColorAt(x, y).ToString() == colorHex)  //nah, its going to be clicked when a specific hex color is found at this specific pixel
+                            {
+                                AddLine($"{utilities.GetColorAt(x, y).ToString()} found");          //feedback
+                                AddLine($"Delay for {delay / 1000} seconds before clicking");
+                                await Task.Delay(delay);
+                                Utilities.leftMouseClick(x, y);
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AddLine($"Whoa, you moved the mouse before or during the {whatColor.ToUpper()} color check!  _m o u s e   w a s   s h a k e n_");
+                        mouseShok = true;
+                        break;
+                    }
+                }               
+            }
+
             
+
             if (numberOfRuns != "")          //user must input the number of runs for the for loop to run through for any of this to work
             {
-
                 // wait what happens if it cannot be parsed?
                 for (int i = 0; i < Int32.Parse(numberOfRuns); i++) //will do however much based on input
                 {
-
-
                     AddLine($"\n ---Night_Run Counter: {i + 1}");
-                    //if (Keyboard.IsKeyDown(Key.RightShift)) { AddLine("Right Shift is pressed, ok"); break; }
 
-
-                    await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");
-
-                    //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+                    await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");                    
                     await oneClick(secondX, secondY, (int)redDelay, redHex, "red");
-
-                    //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-                    //here for visual indication
-                    AddLine("Wait for 25 seconds before first color check. I will move to 'Results' text without clicking");
-                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 20 seconds, no real rush here
-
-                    AddLine("Initializing color check for loop phase 3 (WHITE)");
+                    
+                    AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
+                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
                     await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
-
-
-
                 }
-
-
                 AddLine("---------All Knight Runs Finished");
 
                 /*
@@ -210,7 +188,6 @@ namespace WpfApp2
                     //first need to close nox which will be a couple of clicks
                     //pressing the pg_up or pg_dwn opens the apps opened on the phone screen so maybe use an automated keyboard press instead of click?
 
-
                     //hard code all of this because it will always be the same                   
                     leftMouseClick(20, 1175);
                     await Task.Delay(1000);
@@ -218,17 +195,12 @@ namespace WpfApp2
                     await Task.Delay(1000);
                     SetCursorPos(20, 1050);    //change this to leftMouseClick when ready
                     AddLine("CY@");
-
                 }
-
-                
-
-
-
-
                 */
             }
         }
+
+
 
 
         public void replaceLine(string oldLine, string newLine)
@@ -285,8 +257,8 @@ namespace WpfApp2
         private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
             AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
-            imRUNNING();
-
+            //imRUNNING();
+            nightRun();
         }
     }
 }

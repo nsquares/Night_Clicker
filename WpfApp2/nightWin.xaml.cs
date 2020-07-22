@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace WpfApp2
 {
     /// <summary>
@@ -25,6 +26,7 @@ namespace WpfApp2
 
         Utilities utilities = new Utilities();
         ShiftEvent shift = new ShiftEvent();
+
         private KeyboardInput globalKeyboard;
 
         //public static bool doIExist = false;  //have been moved
@@ -283,7 +285,7 @@ namespace WpfApp2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
-            shift.switchTime();
+            //ShiftEvent.switchTime();
             AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
             imRUNNING();
         }

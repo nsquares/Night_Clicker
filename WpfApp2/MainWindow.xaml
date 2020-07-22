@@ -150,7 +150,10 @@
         <Label Grid.Column="1" Grid.Row="8" Content="Number of Runs (int):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Grid.Column="2" Grid.Row="8" VerticalAlignment="Center" Name="numOfRunsTB" Margin="0,0,75,0"/>
         <CheckBox Grid.Column="2" Grid.Row="9" Content="Shut Down" VerticalAlignment="Center" Margin="20,0,40,0"  Name="shutDownCB"/>
-        <Button Grid.Column="1" Grid.Row="9" Content="Night Run" Name="nightButton" Click="Night_Click" VerticalAlignment="Center"/>
+        <Button Grid.Column="1" Grid.Row="9" Content="NightRun" Name="nightButton" Click="Night_Click" VerticalAlignment="Center"/>
+
+        <Button Grid.Column="1" Grid.Row="10" Content="NightRun 2" Name="nightButton2" Click="Night_Click" VerticalAlignment="Center"/>
+        <Button Grid.Column="3" Grid.Row="10" Content="NightRun 3" Name="nightButton3" Click="Night_Click" VerticalAlignment="Center"/>
 
 
 
@@ -232,7 +235,7 @@
 
 
 
-        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
+        <RichTextBox Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
 
 
 

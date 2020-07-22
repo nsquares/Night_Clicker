@@ -196,7 +196,7 @@ namespace WpfApp2
                 }));                
             }
                    // this boolean doIExist still works even when I created a new thread so the nightWin is not made on the new thread but is ran on the new thread
-            if (numOfRunsTB.Text != "" && !nightWin.doIExist)   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
+            if (numOfRunsTB.Text != "")   // its like as if the whole application was created and initialized on one thread or the main thread maybe?
             {
                 Thread nightThread = new Thread(new ThreadStart(ThreadProc));
 
@@ -212,10 +212,10 @@ namespace WpfApp2
                 nightWin.doIExist = true;
                 AddLineMain($"The thread '{nightThread.Name}' has succesfully initialized at {DateTime.Now.ToLongTimeString()}");
             }
-            else if (nightWin.doIExist)
+            /*else if (nightWin.doIExist)
             {
                 AddLineMain("Bruh, only one instance of the Night Run is allowed");
-            }
+            }*/
             else
             {
                 AddLineMain("Oi, how many runs do you want?");

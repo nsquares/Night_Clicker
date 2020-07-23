@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"        
-        Title="C l i c k" Height="500" Width="720" MinHeight="500" MinWidth="720" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" > 
+        Title="C l i c k" Height="600" Width="720" MinHeight="600" MinWidth="720" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" > 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -29,6 +29,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="33"/>
             <RowDefinition Height="33"/>
+            <RowDefinition Height="25"/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -149,7 +150,7 @@
 
         <Label Grid.Column="1" Grid.Row="8" Content="Number of Runs (int):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Grid.Column="2" Grid.Row="8" VerticalAlignment="Center" Name="numOfRunsTB" Margin="0,0,75,0"/>
-        <CheckBox Grid.Column="2" Grid.Row="9" Content="Shut Down" VerticalAlignment="Center" Margin="20,0,40,0"  Name="shutDownCB"/>
+        <CheckBox Grid.Column="2" Grid.Row="10" Content="Shut Down" VerticalAlignment="Center" Margin="20,0,40,0"  Name="shutDownCB"/>
         <Button Grid.Column="1" Grid.Row="9" Content="Night Run" Name="nightButton" Click="Night_Click" VerticalAlignment="Center"/>
 
 
@@ -221,22 +222,11 @@
         <Label Grid.Column="5" Grid.Row="9" Name="utcLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
         <Label Grid.Column="6" Grid.Row="9" Content="UTC-7" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
-
-
         <!--Label Grid.Column="5" Grid.Row="9" Name="counterLabel" VerticalAlignment="Center" HorizontalAlignment="Center"/-->
 
+        <CheckBox Grid.Column="2" Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Anni Runs" Name="anniCB"/>
 
-
-
-
-
-
-
-        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
-
-
-
-
+        <RichTextBox Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
 
         <!--<Canvas Grid.Column="0" Grid.Row="8" Height="20" Width="800" VerticalAlignment="Top">
             <Line

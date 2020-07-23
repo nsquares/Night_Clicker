@@ -99,6 +99,8 @@ namespace WpfApp2
         public string numberOfRuns = "";
         public static DateTime endTime;
         public bool logTime = false;
+        public bool shutDown = false;
+        public bool anniRuns = false;
 
         private async void nightRun()
         {
@@ -143,8 +145,12 @@ namespace WpfApp2
                                 AddLine($"Delay for {delay / 1000} seconds before clicking");
                                 await Task.Delay(delay);
                                 Utilities.leftMouseClick(x, y);
-                                await Task.Delay(delay);          //make a checkbox case for anni runs for second click
-                                Utilities.leftMouseClick(x, y);
+                                if (anniRuns == true)
+                                {
+                                    AddLine("Another click incoming because this is an Anni run...");
+                                    await Task.Delay(delay);     
+                                    Utilities.leftMouseClick(x, y);
+                                }
                                 return;
                             }
                         }
@@ -189,9 +195,17 @@ namespace WpfApp2
                     await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");                    
                     await oneClick(secondX, secondY, (int)redDelay, redHex, "red");
                     
-                    AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
-                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+                    if (mouseShok == false)
+                    {
+                        AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
+                        await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+                    }
                     await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
+
+                    if (mouseShok == true)
+                    {
+                        break;
+                    }
                 }
                 logTime = true;
                 endTime = DateTime.Now;

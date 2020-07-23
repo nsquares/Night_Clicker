@@ -94,7 +94,7 @@ namespace WpfApp2
 
         public float blueDelay = 2000;    //you can modify these while running the application
         public float redDelay = 2000;     //there is no point but will keep as variables
-        public float whiteDelay = 4000;
+        public float whiteDelay = 5000;
 
         public string numberOfRuns = "";
         public static DateTime endTime;
@@ -108,11 +108,11 @@ namespace WpfApp2
             int secondX = 1600;
             int secondY = 850;
 
-            int pausePixelX = 101;      // TODO: hey man change these two variables to be the pause button again and... (yea, no matter what)
-            int pausePixelY = 925;
+            int pausePixelX = 1696; //   101
+            int pausePixelY = 100;  //   925
 
-            string blueHex = "#FFFFFFFF";  // FF005F89   (originial)
-            string redHex = "#FFFFFFFF";  // FF792201   
+            string blueHex = "#FF005F89";  // FF005F89   (originial)
+            string redHex = "#FF792201";  // FF792201   
             string whiteHex = "#FFFFFFFF";  // TODO: find the color of white being overlayed by the black end screen and test to see if it is always the same color on every level (is anni different than other levels because of that unique anni report rectangle in the middle of the screen)
                                             //nah nah nah, this has to be white and the boolean has to be "NOT EQUAL", the overlay randomly blurs the screen and color of blur is different for almost all stages so it does not matter
 
@@ -125,7 +125,7 @@ namespace WpfApp2
                 Utilities.SetCursorPos(x, y);                
                 AddLine($"Checking {whatColor} button now");
 
-                for (int j = 0; j < 300; j++) //last for max 10 minutes even  //actually I do not know for sure because the delay can change
+                for (int j = 0; j < 300; j++) //last for max 10 minutes even or 25 minutes even if it is in-game  //actually I do not know for sure because the delay can change
                 { 
                     if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
                     {
@@ -142,6 +142,8 @@ namespace WpfApp2
                                 AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");          //feedback
                                 AddLine($"Delay for {delay / 1000} seconds before clicking");
                                 await Task.Delay(delay);
+                                Utilities.leftMouseClick(x, y);
+                                await Task.Delay(delay);          //make a checkbox case for anni runs for second click
                                 Utilities.leftMouseClick(x, y);
                                 return;
                             }

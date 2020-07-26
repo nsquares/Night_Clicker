@@ -94,7 +94,7 @@ namespace WpfApp2
 
         public float blueDelay = 2000;    //you can modify these while running the application
         public float redDelay = 2000;     //there is no point but will keep as variables
-        public float whiteDelay = 5000;
+        public float whiteDelay = 8000;
 
         public string numberOfRuns = "";
         public static DateTime endTime;
@@ -143,9 +143,9 @@ namespace WpfApp2
                             {
                                 AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");          //feedback
                                 AddLine($"Delay for {delay / 1000} seconds before clicking");
-                                await Task.Delay(delay);
-                                Utilities.leftMouseClick(x, y);
-                                if (anniRuns == true)
+                                await Task.Delay(delay);                                          //TODO: this cannot work, I need to look for something instead of waiting a few seconds to click just for the item drops to load
+                                Utilities.leftMouseClick(x, y);                     //BIG TODO: make a while loop you fucking retard, and make most or all of the other for loops while loops as well you fgt
+                                if (anniRuns == true)                        
                                 {
                                     AddLine("Another click incoming because this is an Anni run...");
                                     await Task.Delay(delay);     

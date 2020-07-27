@@ -100,7 +100,7 @@ namespace WpfApp2
         public static DateTime endTime;
         public bool logTime = false;
         public bool shutDown = false;
-        public bool anniRuns = false;
+        //public bool anniRuns = false;
 
         private async void nightRun()
         {

@@ -94,7 +94,7 @@ namespace WpfApp2
 
         public float blueDelay = 2000;    //you can modify these while running the application
         public float redDelay = 2000;     //there is no point but will keep as variables
-        public float whiteDelay = 8000;
+        public float whiteDelay = 2000; //8000
 
         public string numberOfRuns = "";
         public static DateTime endTime;
@@ -124,11 +124,12 @@ namespace WpfApp2
 
             async Task oneClick(int x, int y, int delay, string colorHex, string whatColor)
             {
+                int j = 0;
                 Utilities.SetCursorPos(x, y);                
                 AddLine($"Checking {whatColor} button now");
 
-                for (int j = 0; j < 300; j++) //last for max 10 minutes even or 25 minutes even if it is in-game  //actually I do not know for sure because the delay can change
-                { 
+                while (true)
+                {                                        
                     if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
                     {
                         await Task.Delay(delay);
@@ -136,20 +137,25 @@ namespace WpfApp2
                         if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
                         else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay / 1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
 
-
                         if (colorHex == "#FFFFFFFF")  //this is for annihaltion runs (blur is inconsistent)
                         {
                             if (utilities.GetColorAt(x, y).ToString() != colorHex)
                             {
-                                AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");          //feedback
-                                AddLine($"Delay for {delay / 1000} seconds before clicking");
-                                await Task.Delay(delay);                                          //TODO: this cannot work, I need to look for something instead of waiting a few seconds to click just for the item drops to load
-                                Utilities.leftMouseClick(x, y);                     //BIG TODO: make a while loop you fucking retard, and make most or all of the other for loops while loops as well you fgt
-                                if (anniRuns == true)                        
-                                {
-                                    AddLine("Another click incoming because this is an Anni run...");
-                                    await Task.Delay(delay);     
+                                AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");
+
+                                while (utilities.GetColorAt(firstX, firstY).ToString() != blueHex)
+                                {                                    
+                                    AddLine($"Delay for {(delay*4) / 1000} seconds before clicking");
+                                    await Task.Delay(delay*4);                                          
                                     Utilities.leftMouseClick(x, y);
+                                    /*
+                                    if (anniRuns == true)                                      //I do not think this is needed anymore because of the while loop in here
+                                    {
+                                        AddLine("Another click incoming because this is an Anni run...");
+                                        await Task.Delay(delay);
+                                        Utilities.leftMouseClick(x, y);
+                                    }
+                                    */
                                 }
                                 return;
                             }
@@ -172,6 +178,7 @@ namespace WpfApp2
                         mouseShok = true;
                         break;
                     }
+                    j++;
                 }               
             }
 

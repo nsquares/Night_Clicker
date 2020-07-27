@@ -162,10 +162,12 @@ namespace WpfApp2
                 Dispatcher.BeginInvoke(new Action(() =>
                 {                    
                     nightWinInstance.numberOfRuns = numOfRunsTB.Text;
+                    /*
                     if (anniCB.IsChecked == true)
                     {
                         nightWinInstance.anniRuns = true;
                     }
+                    */
 
                     if (shutDownCB.IsChecked == true)                //TODO: expand upon this more to (dont place the code here tho), shut down the android app and nox, probably dont turn off the computer nor kill this application because unsafe personally but do it on a throwaway PC
                     {

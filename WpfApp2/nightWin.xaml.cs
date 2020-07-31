@@ -221,21 +221,74 @@ namespace WpfApp2
 
 
 
-                /*
-                if (shutDownCB.IsChecked == true)
-                {
-                    //first need to close nox which will be a couple of clicks
-                    //pressing the pg_up or pg_dwn opens the apps opened on the phone screen so maybe use an automated keyboard press instead of click?
 
-                    //hard code all of this because it will always be the same                   
-                    leftMouseClick(20, 1175);
-                    await Task.Delay(1000);
-                    leftMouseClick(20, 1140);
-                    await Task.Delay(1000);
-                    SetCursorPos(20, 1050);    //change this to leftMouseClick when ready
-                    AddLine("CY@");
-                }
-                */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // shut down protocol used to be here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
         }
 

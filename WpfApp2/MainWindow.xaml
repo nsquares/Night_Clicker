@@ -147,7 +147,10 @@
                 />
         </Canvas>-->
 
-        
-        
+
+        <Button Grid.Column="5" Grid.Row="8" Content="shut" Click="Button_Click"/>
+
+
+
     </Grid>
 </Window>

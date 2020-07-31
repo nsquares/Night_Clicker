@@ -343,7 +343,48 @@ namespace WpfApp2
             System.Windows.Application.Current.Shutdown();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            shutDown();            
+        }
 
+
+        private async void shutDown()
+        {
+            if (shutDownCB.IsChecked == true)
+            {
+                //first need to close nox which will be a couple of clicks
+                //pressing the pg_up or pg_dwn opens the apps opened on the phone screen so maybe use an automated keyboard press instead of click? nah im hacking at that point
+                await Task.Delay(2000); //just so that I have time to jump on the cancel
+                Utilities.leftMouseClick(1900, 930);
+                
+                
+                await Task.Delay(2000);
+                Utilities.leftMouseClick(960, 540);
+                
+                await Task.Delay(2000);
+                Utilities.leftMouseClick(1900,10);    //change this to leftMouseClick when ready
+
+
+                /*
+                await Task.Delay(1000);
+                Utilities.SetCursorPos(960, 540);    //change this to leftMouseClick when ready as well
+                await Task.Delay(2000);
+                */
+
+
+
+                /*
+                //hard code all of this because it will always be the same                   
+                Utilities.leftMouseClick(20, 1058);
+                await Task.Delay(1000);
+                Utilities.leftMouseClick(20, 1015);
+                await Task.Delay(1000);
+                Utilities.SetCursorPos(20, 929);    //change this to leftMouseClick when ready
+                AddLineMain("CY@");
+                */
+            }
+        }
     }
 
    

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"        
-        Title="C l i c k" Height="600" Width="720" MinHeight="600" MinWidth="720" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" > 
+        Title="C l i c k" Height="420" Width="690" MinHeight="420" MinWidth="690" MaxWidth="710" WindowStartupLocation="Manual" Left="0" Top="0" Closed="Window_Closed" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -22,10 +22,10 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="33"/>
             <RowDefinition Height="33"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="33"/>
             <RowDefinition Height="33"/>
-            <RowDefinition Height="33"/>
+            <RowDefinition Height="21"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="33"/>
             <RowDefinition Height="33"/>
@@ -53,105 +53,15 @@
         <Button Grid.Column="1" Grid.Row="1" Content="Color Check" Click="Color_Click" VerticalAlignment="Center" />
         <Button Grid.Column="1" Grid.Row="2" Content="Preview" VerticalAlignment="Center" Click="Preview_Click"/>
 
-        
-        
-        
-
-
-        <Label Grid.Column="1" Grid.Row="4" Content="blueDelay (sec):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" Name="blueTB" Margin="0,0,75,0">
-            <TextBox.Style>
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="2 (default)" Foreground="LightGray" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-        
-        
-        <Label Grid.Column="1" Grid.Row="5" Content="redDelay (sec):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="2" Grid.Row="5" VerticalAlignment="Center" Name="redTB" Margin="0,0,75,0">
-            <TextBox.Style>
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="2 (default)" Foreground="LightGray" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-        
-        
-        <Label Grid.Column="1" Grid.Row="6" Content="whiteDelay (sec):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="2" Grid.Row="6" VerticalAlignment="Center" Name="whiteTB" Margin="0,0,75,0">
-            <TextBox.Style>
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="6 (default)" Foreground="LightGray" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-        
-        <CheckBox Grid.Column="2" Grid.Row="7" Content="Modify Delays" VerticalAlignment="Center" HorizontalAlignment="Left" Name="nightRunDelaysCB"/>
-        <Button Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Log Delay(s)" Click="Log_Click"/>
-
-
-        
-        
+                       
         
         
 
 
-        <Label Grid.Column="1" Grid.Row="8" Content="Number of Runs (int):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="2" Grid.Row="8" VerticalAlignment="Center" Name="numOfRunsTB" Margin="0,0,75,0"/>
-        <CheckBox Grid.Column="2" Grid.Row="9" Content="Shut Down" VerticalAlignment="Center" Margin="20,0,40,0"  Name="shutDownCB"/>
-        <Button Grid.Column="1" Grid.Row="9" Content="Night Run" Name="nightButton" Click="Night_Click" VerticalAlignment="Center"/>
+        <Label Grid.Column="1" Grid.Row="4" Content="Number of Runs (int):" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" Name="numOfRunsTB" Margin="0,0,75,0"/>
+        <CheckBox Grid.Column="2" Grid.Row="5" Content="Shut Down" VerticalAlignment="Center" Margin="20,0,40,0"  Name="shutDownCB"/>
+        <Button Grid.Column="1" Grid.Row="5" Content="Night Run" Name="nightButton" Click="Night_Click" VerticalAlignment="Center"/>
 
 
 
@@ -207,26 +117,26 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <CheckBox Grid.Column="5" Grid.Row="6" Content="Infinity" VerticalAlignment="Center" Name="infinityCB"/>
-        <Button Grid.Column="4" Grid.Row="6" Content="C Clicker" VerticalAlignment="Center" HorizontalAlignment="Center" Click="CLICK"/>
+        <CheckBox Grid.Column="5" Grid.Row="6" Content="Infinity" VerticalAlignment="Bottom" Name="infinityCB"/>
+        <Button Grid.Column="4" Grid.Row="6" Content="C Clicker" VerticalAlignment="Bottom" HorizontalAlignment="Center" Click="CLICK"/>
 
 
-        <Label Grid.Column="3" Grid.Row="8" Content="Start Time:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <Label Grid.Column="4" Grid.Row="8" Name="startLabel" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <Label Grid.Column="1" Grid.Row="7" Content="Start Time:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <Label Grid.Column="2" Grid.Row="7" Name="startLabel" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
-        <Label Grid.Column="3" Grid.Row="9" Content="Full Duration:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <Label Grid.Column="4" Grid.Row="9" Name="finishLabel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Label Grid.Column="1" Grid.Row="8" Content="Full Duration:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <Label Grid.Column="2" Grid.Row="8" Name="finishLabel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <TextBlock Grid.Column="5" Grid.Row="7" Grid.RowSpan="3" Text="___Real-Time___" Margin="0,15,0,0" TextDecorations="Underline" Background="Honeydew"/>
-        <Label Grid.Column="5" Grid.Row="8" Name="timeLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
-        <Label Grid.Column="5" Grid.Row="9" Name="utcLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
-        <Label Grid.Column="6" Grid.Row="9" Content="UTC-7" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="3" Grid.Row="6" Grid.RowSpan="3" Text="___Real-Time___" Margin="0,0,0,0" TextDecorations="Underline" Background="Honeydew"/>
+        <Label Grid.Column="3" Grid.Row="7" Name="timeLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
+        <Label Grid.Column="3" Grid.Row="8" Name="utcLabel" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
+        <Label Grid.Column="4" Grid.Row="8" Content="UTC-7" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
         <!--Label Grid.Column="5" Grid.Row="9" Name="counterLabel" VerticalAlignment="Center" HorizontalAlignment="Center"/-->
 
         <!--CheckBox Grid.Column="2" Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Anni Runs" Name="anniCB"/-->
 
-        <RichTextBox Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
+        <RichTextBox Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="8" Grid.RowSpan="9" Background="AntiqueWhite" FontFamily="Comic Sans MS" BorderBrush="Black"  Name="outputBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True"/>
 
         <!--<Canvas Grid.Column="0" Grid.Row="8" Height="20" Width="800" VerticalAlignment="Top">
             <Line

@@ -23,16 +23,57 @@ namespace WpfApp2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// 
+    /// This app is designed to automate the process of depletion your sanity in arknights on the daily.
+    /// No more waiting a few minutes for the mission to end, just for you to click two buttons to start the mission all over again and repeat this for an hour or so. 
+    /// All you want to do is try to farm a specific material until you run out of sanity so this app will automatically click those two buttons after detecting that the mission ends.
+    ///  
+    /// The main functions are to click the two buttons that start a mission, the blue one in the bottom right corner after selecting a level and the red "mission start" button in the sqaud grid screen.
+    /// Then the app can detect when the mission is finished and then click these two buttons again.
+    /// The user has to input how many times that they want to run a specific mission, the app can not change missions nor know if there is enough sanity or not to start it.
+    /// The app completes and stops running when it has gone through the process for that many missions that the user inputted.
+    /// Users can cancel the process of the application by pressing the right shift key (righthand-side of the keyboard) or by moving the mouse. Both are effective and will accomplish the same goal of canceling.
+    /// 
+    /// (There is also a general auto clicker, intended for a game like cookie clicker)
+    /// 
+    /// 
+    /// Audience:
+    /// -Nox player users (has to be PC because this app utilizes taking over the mouse cursor and checking only 3 pixels on your screen)
+    /// 
+    /// How To Install:
+    /// 1. /
+    /// 2. /
+    /// 
+    /// How To Use App:
+    /// (For best performance and to eliminate the chance of problems, please replicate the display settings in my test environment before following this procedure.)
+    /// 1. /
+    /// 2. /
+    /// 3. /
+    /// 4. /
+    /// 5. /
+    /// 
+    /// Test Environment:
+    /// -Nox Player (set to a resolution of 1650 x something)
+    /// -1920 x 1080p monitor
+    /// -maximize nox player (click the rectangle right next to the red "X" at the top-right of the nox window)
+    /// -nox player sidebar is visible
+    /// -OS: windows 10 
+    /// -windows taskbar is visible
+    /// 
+    /// 
+    /// Since you managed to look at the source code, here is a general overview of the program's process:
+    /// -inspect three pixels on the screen and the RGB color of them
+    /// -click on these pixels when they are a specific color
+    /// -keyboard hook for detecting right shift key
+    /// -if statement for when the cursor is not at the location that this program set it to before programmatically clicking
+    /// 
     /// </summary>
     public partial class MainWindow : Window
     {
         Utilities utilities = new Utilities();
-
         TextBox[,] allTBInput;
         int[,] allXandYint;
-
         DispatcherTimer Timer = new DispatcherTimer();
-
         //private delegate void NightRunDelegate();
 
         public MainWindow()
@@ -63,11 +104,16 @@ namespace WpfApp2
             AddLineMain($"Current Mouse Position: {Utilities.GetCursorPosition().ToString()}");
         }
 
-        public void AddLineMain(string text)
+        private void Help_Click(object sender, RoutedEventArgs e)
         {
-            outputBox.AppendText(text);
-            outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
-            outputBox.ScrollToEnd();    
+            AddLineMain("lol");
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            //nightWin.Close();       //set owner properties on nightWin to be owned by MainWindow so that it closes automattcailly when Main window closes
+            // cannot because it is on a different thread
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void Timer_Tick(object sender, EventArgs e)   
@@ -77,79 +123,15 @@ namespace WpfApp2
         }
         
 
-        private void Help_Click(object sender, RoutedEventArgs e)
-        {
-            AddLineMain("lol");
-        }
-
-        //maybe a daily ak run as well later on? too many variables 
-        //requests: wants to change the time of delay on cookie clicker [done]
-        //maybe could also change duration of delays on the night run [done]
-
         //be able to press keyboard buttons automatically as well [working on it...]
 
-        //can I create a clock that runs on application so that I can see the average time through full san clear or/and daily run? [done]
-        //with the clock, can I display how long the app has been running [done]
-        //maybe an interactive timer as well [nah]
-
-
-
-        //how does one get off the UI thread and create another thread to run on?
-
-
-
-        //also need to close the nox application before shuting down
-        //another if statement for when sanity has ran out and refill checkbox is checked so I can refill san automatically
         //what is the screen when there is no san and no more refills as well and mission is sill executed?
-
-        //can I control the volume
-        //change color of night run to look for something else [nah, not important and it will be the same concept as logging new delays in the night run but with string instead of float]
-
-        //id8 infinity button that will rename bin files and copy and populate to the backup folder (backup whenever you change names, each bin file is 4KB so I do not need to delete old versions) rename backups to be -y1,-y2,-y3,-y4 no leading zero
-        //also first check if the three files in the folder currently have been changed/selected/renamed
-        //how about this, analyze the folder for documents, display card bin files present and take input on what to select/rename to use
-
-
-
-
-
 
         //for some reason, these variables cannot update after going through the method modifyRun() -is it because it is a float? maybe try it as an int and deal with multiplying by 1000?
         //ogDelay works perfectly fine but this does not (only difference is that Im not using a method to modify ogDelay and I put the algorithm in the parent)
         //SOLVED: you have to return because I am creating a new instance because I made the parameter 'colorDelay' in the modifyRun function so it is not directly doing math on the targeted variable
 
-
-
-        private void Log_Click(object sender, RoutedEventArgs e)  //this will turn into a log button
-        {
-            /*
-            if (nightRunDelaysCB.IsChecked == true)
-            {
-                nightWin.blueDelay = modifyDelayRun(nightWin.blueDelay, blueTB, "Blue");
-                nightWin.redDelay = modifyDelayRun(nightWin.redDelay, redTB, "Red");
-                nightWin.whiteDelay = modifyDelayRun(nightWin.whiteDelay, whiteTB, "White");
-            }
-            */
-
-            AddLineMain("im commented out");
-        }       
-        /*
-        private float modifyDelayRun(float colorDelay, TextBox inputDelay, string ID)   //okay so this method has to be a return and  blueDelay = modifyRun(); has to happen for blueDelay to update successfully when used in another completely different method
-        {
-            //trying to go from float in seconds to int in miliseconds
-            if (!string.IsNullOrWhiteSpace(inputDelay.Text))
-            {
-                try
-                {
-                    colorDelay = float.Parse(inputDelay.Text);
-                    colorDelay = colorDelay * 1000;
-                }
-                catch { AddLineMain($"I caught something wrong for {ID} delay"); }
-                AddLineMain($"{ID} Delay: {colorDelay} milliseconds");
-            }
-            return colorDelay;
-        }
-        */
+        //log_click event handler used to be here
 
 
         static DateTime startTime; //this has to be a global, dont move this
@@ -163,14 +145,8 @@ namespace WpfApp2
                 Dispatcher.BeginInvoke(new Action(() =>
                 {                    
                     nightWinInstance.numberOfRuns = numOfRunsTB.Text;
-                    /*
-                    if (anniCB.IsChecked == true)
-                    {
-                        nightWinInstance.anniRuns = true;
-                    }
-                    */
 
-                    if (shutDownCB.IsChecked == true)                //TODO: expand upon this more to (dont place the code here tho), shut down the android app and nox, probably dont turn off the computer nor kill this application because unsafe personally but do it on a throwaway PC
+                    if (shutDownCB.IsChecked == true)  
                     {
                         nightWinInstance.shutDown = true;
                     }
@@ -218,6 +194,7 @@ namespace WpfApp2
             }
         }         
 
+
         //---------------------------------------------------------------(end of night run methods)------------------------------------------------------------------------------------------------
 
 
@@ -229,6 +206,7 @@ namespace WpfApp2
             await Task.Delay(500);
             AddLineMain("I do nothing rn but check color");
         }
+
         private async void Preview_Click(object sender, RoutedEventArgs e)   
         {
             getInput(allXandYint, allTBInput);
@@ -239,8 +217,7 @@ namespace WpfApp2
             AddLineMain("--------Finished Preview");
         }
 
-
-        private async void  CLICK(object sender, RoutedEventArgs e) 
+        private async void CLICK(object sender, RoutedEventArgs e)                             //cookie clicker
         {
             AddLineMain("ight m8, u have 10 seconds to position the mouse starting now");
             await Task.Delay(10000);
@@ -260,8 +237,6 @@ namespace WpfApp2
             }
             AddLineMain($"I got delay: {ogDelay} ms");
 
-
-
             if ((!string.IsNullOrWhiteSpace(numOfClicksTB.Text)) && infinityCB.IsChecked == false)
             {
                 try { numOfClicks = Int32.Parse(numOfClicksTB.Text); }
@@ -272,8 +247,6 @@ namespace WpfApp2
                 }
             }
             AddLineMain($"I got the order to click: {numOfClicks} times");
-
-
 
             if (infinityCB.IsChecked == true)
             {
@@ -294,14 +267,14 @@ namespace WpfApp2
                     await Task.Delay(ogDelay);
                     Utilities.leftMouseClick(gotX, gotY);
                 }
-            }
-           
+            }           
             AddLineMain("------Finished c l i c k i n g");
         }
 
 
-
         //-----------------------------------------------------------------------------(Utilities)------------------------------------------------------------------------------------
+
+
         private void getInput(int[,] intArray, TextBox[,] TBarray)             //why is this an array and involves populating it? (too busy to fix this)
         {   //clear all data points first
             for (int i = 0; i < (intArray.Length / 2); i++)
@@ -334,22 +307,56 @@ namespace WpfApp2
             }
         }
 
- 
-
-        private void Window_Closed(object sender, EventArgs e)
+        public void AddLineMain(string text)
         {
-            //nightWin.Close();       //set owner properties on nightWin to be owned by MainWindow so that it closes automattcailly when Main window closes
-                                      // cannot because it is on a different thread
-            System.Windows.Application.Current.Shutdown();
+            outputBox.AppendText(text);
+            outputBox.AppendText("\u2028"); // Linebreak, not paragraph break
+            outputBox.ScrollToEnd();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             shutDown();            
         }
 
-
-        private async void shutDown()
+        private async void shutDown()  //this goes to line 225 on nightWin.xaml.cs
         {
             if (shutDownCB.IsChecked == true)
             {
@@ -357,20 +364,17 @@ namespace WpfApp2
                 //pressing the pg_up or pg_dwn opens the apps opened on the phone screen so maybe use an automated keyboard press instead of click? nah im hacking at that point
                 await Task.Delay(2000); //just so that I have time to jump on the cancel
                 Utilities.leftMouseClick(1900, 930);
-                
-                
+                                
                 await Task.Delay(2000);
                 Utilities.leftMouseClick(960, 540);
                 
                 await Task.Delay(2000);
                 Utilities.leftMouseClick(1900,10);    //change this to leftMouseClick when ready
-
-
-                /*
+                
                 await Task.Delay(1000);
                 Utilities.SetCursorPos(960, 540);    //change this to leftMouseClick when ready as well
-                await Task.Delay(2000);
-                */
+                await Task.Delay(3000);
+                
 
 
 
@@ -386,6 +390,4 @@ namespace WpfApp2
             }
         }
     }
-
-   
 }

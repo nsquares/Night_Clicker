@@ -28,7 +28,6 @@ namespace WpfApp2
 
         Utilities utilities = new Utilities();
         public static bool doIExist = false;
-
         private KeyboardInput globalKeyboard;
 
         public nightWin()    //okay, so I think this is the only method which runs on the main thread and all other methods run on my custom because if I take a custom method and call it in this Main method, exception will be thrown which says object (on the UI like richtextbox) is owned or created by a different thread than this one or the Main thread
@@ -42,16 +41,26 @@ namespace WpfApp2
             //pro tip: this should be treated as the main method of the window and this runs on the UI / Main thread, stuff below can run on a new thread that you create            
         }
 
-        private async void imRUNNING()  //method that simulates random work, delete after adventure is done
+        private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
         {
-            for (int i = 0; i< Int32.Parse(numberOfRuns); i++)
-            {
-                await Task.Delay(250);
-                AddLine($"Hello {i}");               // whut: throws an exception and uh is still on the UI / Main thread so how do I completely move this onto the new thread....
-                //Utilities.SetCursorPos(950, 600);  //okay, delete comment above me because I think the reason why this happens is because I try to run this method in the main method of this page which is confirmed to be on the main thread but buttons on the window are connected to the new thread                                                       
-                Console.WriteLine($"im running {i}");
-            }
+            AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
+            nightRun();
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            doIExist = false;
+
+            globalKeyboard.Dispose();
+
+            GC.Collect();
+
+            GC.WaitForPendingFinalizers();
+
+            //Environment.Exit(0); //ends the whole application so not this one
+
+            Dispatcher.InvokeShutdown();
+        }        
 
         private void globalKeyboard_KeyBoardKeyPressed(object sender, EventArgs e)  //goal is this, I have this call .close() on the second window that displays a conole-like feedback log while the night run executes
         {
@@ -65,33 +74,7 @@ namespace WpfApp2
                 */             
                 this.Close();
             }
-        }
-
-        public void AddLine(string text)
-        {
-
-            outputBoxNight.AppendText(text);
-            outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
-            outputBoxNight.ScrollToEnd();
-
-            /*   //okay, keep this because this does actually allow me to "cross threads", specifically between the UI / Main thread and my custom thread
-            outputBoxNight.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                outputBoxNight.AppendText(text);
-                outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
-                outputBoxNight.ScrollToEnd();
-            }));
-            */
-
-            /*this.outputBoxNight.Dispatcher.Invoke(DispatcherPriority.Render,
-                new Action(() => {
-                    outputBoxNight.AppendText(text);
-                    outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
-                    outputBoxNight.ScrollToEnd();
-                }));*/
-
-        }
-
+        }        
 
         public float blueDelay = 2000;    //you can modify these while running the application
         public float redDelay = 2000;     //there is no point but will keep as variables
@@ -149,14 +132,6 @@ namespace WpfApp2
                                     AddLine($"Delay for {(delay*4) / 1000} seconds before clicking");
                                     await Task.Delay(delay*4);                                          
                                     Utilities.leftMouseClick(x, y);
-                                    /*
-                                    if (anniRuns == true)                                      //I do not think this is needed anymore because of the while loop in here
-                                    {
-                                        AddLine("Another click incoming because this is an Anni run...");
-                                        await Task.Delay(delay);
-                                        Utilities.leftMouseClick(x, y);
-                                    }
-                                    */
                                 }
                                 return;
                             }
@@ -182,8 +157,7 @@ namespace WpfApp2
                     j++;
                 }               
             }
-
-            
+            //-------------------------------------------------------------------------------(end of local method)----------------------------------------------------------------------------
 
             if (numberOfRuns != "")          //user must input the number of runs for the for loop to run through for any of this to work
             {
@@ -195,105 +169,43 @@ namespace WpfApp2
                 AddLine("1");
                 await Task.Delay(1000);
 
-                // wait what happens if it cannot be parsed?
-                for (int i = 0; i < Int32.Parse(numberOfRuns); i++) //will do however much based on input
+                try
                 {
-                    AddLine($"\n ---Night_Run Counter: {i + 1}");
-
-                    await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");                    
-                    await oneClick(secondX, secondY, (int)redDelay, redHex, "red");
-                    
-                    if (mouseShok == false)
+                    for (int i = 0; i < Int32.Parse(numberOfRuns); i++) //will do however much based on input
                     {
-                        AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
-                        await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
-                    }
-                    await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
+                        AddLine($"\n ---Night_Run Counter: {i + 1}");
 
-                    if (mouseShok == true)
-                    {
-                        break;
+                        await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");
+                        await oneClick(secondX, secondY, (int)redDelay, redHex, "red");
+
+                        if (mouseShok == false)
+                        {
+                            AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
+                            await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+                        }
+                        await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
+
+                        if (mouseShok == true)
+                        {
+                            break;
+                        }
                     }
                 }
+                catch (System.FormatException)
+                {
+                    AddLine("Uh, it seems the input was not an integer");
+                }
+                
                 logTime = true;
                 endTime = DateTime.Now;
                 AddLine("---------All Knight Runs Finished");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 // shut down protocol used to be here
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             }
         }
-
-
-
 
         public void replaceLine(string oldLine, string newLine)
         {
@@ -320,37 +232,28 @@ namespace WpfApp2
             }
         }
 
-        
-        private void Window_Closed(object sender, EventArgs e)
+        public void AddLine(string text)
         {
-            doIExist = false;
 
-            /*     // so idk but this will create a new instance of the main window and then append to that new instance which is not shown, how do I refer to the main window already opened instead and then append it 
-            MainWindow windowMain = new MainWindow();
-            windowMain.Dispatcher.BeginInvoke(new Action(() => windowMain.AddLineMain("I took out the trash (i.e. dispose key-log and GC)")));
-            //windowMain.AddLineMain("I took out the trash (i.e. dispose key-log and GC)");
+            outputBoxNight.AppendText(text);
+            outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+            outputBoxNight.ScrollToEnd();
+
+            /*   //okay, keep this because this does actually allow me to "cross threads", specifically between the UI / Main thread and my custom thread
+            outputBoxNight.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                outputBoxNight.AppendText(text);
+                outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+                outputBoxNight.ScrollToEnd();
+            }));
             */
-            
 
-            globalKeyboard.Dispose();
-
-            GC.Collect();
-
-            GC.WaitForPendingFinalizers();
-
-            //Environment.Exit(0); //ends the whole application so not this one
-
-            //Dispatcher.BeginInvokeShutdown(System.Windows.Threading.DispatcherPriority.Send);  //btw, dont know if it should be syncous or asyncous but both work so
-
-            Dispatcher.InvokeShutdown();              
-            //cant abort here because this .cs does not know the nightThread object so only can abort on the mainWindow
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)  //this runs on custom thread xd
-        {
-            AddLine($"The thread '{Dispatcher.Thread.Name}' has succesfully initialized");
-            //imRUNNING();
-            nightRun();
+            /*this.outputBoxNight.Dispatcher.Invoke(DispatcherPriority.Render,
+                new Action(() => {
+                    outputBoxNight.AppendText(text);
+                    outputBoxNight.AppendText("\u2028"); // Linebreak, not paragraph break
+                    outputBoxNight.ScrollToEnd();
+                }));*/
         }
     }
 }

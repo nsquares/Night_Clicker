@@ -342,7 +342,20 @@ namespace WpfApp2
             System.Windows.Application.Current.Shutdown();
         }
 
+        private async void TCC_Click(object sender, RoutedEventArgs e)
+        {
+            AddLineMain("Giving you 8 seconds to position the cursor to get the color of that pixel on the screen");
+            await Task.Delay(8000);
 
+            string xANDy = Utilities.GetCursorPosition().ToString();
+
+            string x = xANDy.Substring(0, xANDy.IndexOf(","));
+            AddLineMain($"x-pixel = {x}");
+            string y = xANDy.Substring(xANDy.IndexOf(",") + 1, (xANDy.Length - 1) - xANDy.IndexOf(","));
+            AddLineMain($"y-pixel = {y}");
+            
+            AddLineMain(utilities.GetColorAt(Int32.Parse(x), Int32.Parse(y)).ToString());
+        }
     }
 
    

@@ -141,11 +141,13 @@
         <CheckBox Grid.Column="2" Grid.Row="7" Content="Modify Delays" VerticalAlignment="Center" HorizontalAlignment="Left" Name="nightRunDelaysCB"/>
         <Button Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Log Delay(s)" Click="Log_Click"/>
 
+        <Button Grid.Column="3" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Content="TrueColorCheck" Click="TCC_Click"/>
 
-        
-        
-        
-        
+
+
+
+
+
 
 
         <Label Grid.Column="1" Grid.Row="8" Content="Number of Runs (int):" HorizontalAlignment="Right" VerticalAlignment="Center"/>

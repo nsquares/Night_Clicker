@@ -104,17 +104,17 @@ namespace WpfApp2
 
         private async void nightRun()
         {
-            int firstX = 1625;          //hard code all of these variables
-            int firstY = 950;
+            int firstX = 1313;   //1625       //hard code all of these variables
+            int firstY = 775;   //950
 
-            int secondX = 1600;
-            int secondY = 850;
+            int secondX = 1313;  //1600
+            int secondY = 700;   //850
 
-            int pausePixelX = 1696; //   101
-            int pausePixelY = 100;  //   925
+            int pausePixelX = 1402;    // 1696              //   101
+            int pausePixelY = 95;     //  100            //   925
 
-            string blueHex = "#FF005F89";  // FF005F89   (originial)
-            string redHex = "#FF792201";  // FF792201   
+            string blueHex = "#FF008BCD";  // FF005F89   (originial)
+            string redHex = "#FF731E00";  // FF792201   
             string whiteHex = "#FFFFFFFF";  // TODO: find the color of white being overlayed by the black end screen and test to see if it is always the same color on every level (is anni different than other levels because of that unique anni report rectangle in the middle of the screen)
                                             //nah nah nah, this has to be white and the boolean has to be "NOT EQUAL", the overlay randomly blurs the screen and color of blur is different for almost all stages so it does not matter
 

@@ -120,7 +120,6 @@ namespace WpfApp2
 
 
             AddLine("To end the Night Run, move the mouse or press the right shift key");
-            bool mouseShok = false;
 
             async Task oneClick(int x, int y, int delay, string colorHex, string whatColor)
             {
@@ -129,54 +128,45 @@ namespace WpfApp2
                 AddLine($"Checking {whatColor} button now");
 
                 while (true)
-                {                                        
-                    if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
+                {
+                    await Task.Delay(delay);
+
+                    if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
+                    else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay / 1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
+
+                    if (colorHex == "#FFFFFFFF")  //this is for annihaltion runs (blur is inconsistent)
                     {
-                        await Task.Delay(delay);
-
-                        if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
-                        else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay / 1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
-
-                        if (colorHex == "#FFFFFFFF")  //this is for annihaltion runs (blur is inconsistent)
+                        if (utilities.GetColorAt(x, y).ToString() != colorHex)
                         {
-                            if (utilities.GetColorAt(x, y).ToString() != colorHex)
-                            {
-                                AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");
+                            AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");
 
-                                while (utilities.GetColorAt(firstX, firstY).ToString() != blueHex)
-                                {                                    
-                                    AddLine($"Delay for {(delay*4) / 1000} seconds before clicking");
-                                    await Task.Delay(delay*4);                                          
-                                    Utilities.leftMouseClick(x, y);
-                                    /*
-                                    if (anniRuns == true)                                      //I do not think this is needed anymore because of the while loop in here
-                                    {
-                                        AddLine("Another click incoming because this is an Anni run...");
-                                        await Task.Delay(delay);
-                                        Utilities.leftMouseClick(x, y);
-                                    }
-                                    */
-                                }
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            if (utilities.GetColorAt(x, y).ToString() == colorHex)  //nah, its going to be clicked when a specific hex color is found at this specific pixel
+                            while (utilities.GetColorAt(firstX, firstY).ToString() != blueHex)
                             {
-                                AddLine($"{utilities.GetColorAt(x, y).ToString()} found");          //feedback
-                                AddLine($"Delay for {delay / 1000} seconds before clicking");
-                                await Task.Delay(delay);
+                                AddLine($"Delay for {(delay * 4) / 1000} seconds before clicking");
+                                await Task.Delay(delay * 4);
                                 Utilities.leftMouseClick(x, y);
-                                return;
+                                /*
+                                if (anniRuns == true)                                      //I do not think this is needed anymore because of the while loop in here
+                                {
+                                    AddLine("Another click incoming because this is an Anni run...");
+                                    await Task.Delay(delay);
+                                    Utilities.leftMouseClick(x, y);
+                                }
+                                */
                             }
+                            return;
                         }
                     }
                     else
                     {
-                        AddLine($"Whoa, you moved the mouse before or during the {whatColor.ToUpper()} color check!  _m o u s e   w a s   s h a k e n_");
-                        mouseShok = true;
-                        break;
+                        if (utilities.GetColorAt(x, y).ToString() == colorHex)  //nah, its going to be clicked when a specific hex color is found at this specific pixel
+                        {
+                            AddLine($"{utilities.GetColorAt(x, y).ToString()} found");          //feedback
+                            AddLine($"Delay for {delay / 1000} seconds before clicking");
+                            await Task.Delay(delay);
+                            Utilities.leftMouseClick(x, y);
+                            return;
+                        }
                     }
                     j++;
                 }               
@@ -202,17 +192,12 @@ namespace WpfApp2
                     await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");                    
                     await oneClick(secondX, secondY, (int)redDelay, redHex, "red");
                     
-                    if (mouseShok == false)
-                    {
-                        AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
-                        await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
-                    }
+
+                    AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
+                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+
                     await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
 
-                    if (mouseShok == true)
-                    {
-                        break;
-                    }
                 }
                 logTime = true;
                 endTime = DateTime.Now;

@@ -110,8 +110,8 @@ namespace WpfApp2
             int secondX = 1313;  //1600
             int secondY = 700;   //850
 
-            int pausePixelX = 1402;    // 1696              //   101
-            int pausePixelY = 95;     //  100            //   925
+            int pausePixelX = 1410;    // 1696              //   101
+            int pausePixelY = 94;     //  100            //   925
 
             string blueHex = "#FF008BCD";  // FF005F89   (originial)
             string redHex = "#FF6E1C00";  // FF792201   

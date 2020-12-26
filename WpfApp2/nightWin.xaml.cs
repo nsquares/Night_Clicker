@@ -92,8 +92,8 @@ namespace WpfApp2
         }
 
 
-        public float blueDelay = 2000;    //you can modify these while running the application
-        public float redDelay = 2000;     //there is no point but will keep as variables
+        public float blueDelay = 1000;    //you can modify these while running the application
+        public float redDelay = 1000;     //there is no point but will keep as variables
         public float whiteDelay = 2000; //8000
 
         public string numberOfRuns = "";
@@ -149,10 +149,10 @@ namespace WpfApp2
                             {
                                 AddLine($"White has disappear and {utilities.GetColorAt(x, y).ToString()} was found");
 
-                                while (utilities.GetColorAt(firstX, firstY).ToString() != blueHex)
+                                while (utilities.GetColorAt(firstX, firstY).ToString() != blueHex)           // I have to click multiple times because i do not know when the aftermath log will pop up (cant really detect a white box with images of operators inside) 
                                 {                                    
-                                    AddLine($"Delay for {(delay*4) / 1000} seconds before clicking");
-                                    await Task.Delay(delay*4);                                          
+                                    AddLine($"Delay for {(delay*2) / 1000} seconds before clicking");
+                                    await Task.Delay(delay*2);                                          
                                     Utilities.leftMouseClick(x, y);
                                     /*
                                     if (anniRuns == true)                                      //I do not think this is needed anymore because of the while loop in here
@@ -228,8 +228,46 @@ namespace WpfApp2
                     }
                     */
 
-                    AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
-                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+
+                    //AddLine("Wait for 35 seconds before first color check. I will move to the pause button without clicking");
+                    //await Task.Delay(35000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+
+                    while (utilities.GetColorAt(pausePixelX, pausePixelY).ToString() != whiteHex) //okay, why not just check if there is a pause button in the top right corner before starting the third oneclick function call?
+                    {
+                        AddLine("Pause button has not appeared yet, in other words, will not start third oneClick function call yet");
+                        await Task.Delay(500);
+                    }
+
 
                     await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
                     /*

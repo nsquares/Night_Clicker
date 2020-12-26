@@ -113,29 +113,35 @@ namespace WpfApp2
             int pausePixelX = 1696; //   101
             int pausePixelY = 100;  //   925
 
-            string blueHex = "#FF005F89";  // FF005F89   (originial)
+            string blueHex = "#FF00608A";  // FF005F89   (originial)    // so this is like the october 1st game updated: FF00608A
             string redHex = "#FF792201";  // FF792201   
             string whiteHex = "#FFFFFFFF";  // TODO: find the color of white being overlayed by the black end screen and test to see if it is always the same color on every level (is anni different than other levels because of that unique anni report rectangle in the middle of the screen)
                                             //nah nah nah, this has to be white and the boolean has to be "NOT EQUAL", the overlay randomly blurs the screen and color of blur is different for almost all stages so it does not matter
 
 
             AddLine("To end the Night Run, move the mouse or press the right shift key");
-            bool mouseShok = false;
+            //bool mouseShok = false;
 
             async Task oneClick(int x, int y, int delay, string colorHex, string whatColor)
             {
                 int j = 0;
-                Utilities.SetCursorPos(x, y);                
+                Utilities.SetCursorPos(x, y);
                 AddLine($"Checking {whatColor} button now");
 
+                int fuck_screensaver = 0;
+
                 while (true)
-                {                                        
-                    if (Utilities.GetCursorPosition().ToString() == $"{x},{y}" && mouseShok == false)
+                {
+                    Utilities.SetCursorPos(x, y);
+
+
+                    if (Utilities.GetCursorPosition().ToString() == $"{x},{y}") //&& mouseShok == false
                     {
                         await Task.Delay(delay);
 
                         if (j == 0) { AddLine($"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
                         else { replaceLine($"How much time has passed right before next color check: {(((float)(j) * (delay / 1000)) / 60)} minutes", $"How much time has passed right before next color check: {(((float)(j + 1) * (delay / 1000)) / 60)} minutes"); }
+
 
                         if (colorHex == "#FFFFFFFF")  //this is for annihaltion runs (blur is inconsistent)
                         {
@@ -162,6 +168,7 @@ namespace WpfApp2
                         }
                         else
                         {
+                            AddLine(utilities.GetColorAt(x, y).ToString());   
                             if (utilities.GetColorAt(x, y).ToString() == colorHex)  //nah, its going to be clicked when a specific hex color is found at this specific pixel
                             {
                                 AddLine($"{utilities.GetColorAt(x, y).ToString()} found");          //feedback
@@ -172,13 +179,25 @@ namespace WpfApp2
                             }
                         }
                     }
+                    /*
                     else
                     {
                         AddLine($"Whoa, you moved the mouse before or during the {whatColor.ToUpper()} color check!  _m o u s e   w a s   s h a k e n_");
-                        mouseShok = true;
+                        //mouseShok = true;
                         break;
                     }
+                    */
+
+                    if (fuck_screensaver == 10)
+                    {
+                        AddLine($"FUCK SCREENSAVER {j}");
+                        Utilities.leftMouseClick(x - 250, y);
+                        await Task.Delay(500);
+                        fuck_screensaver = 0;
+                    }
+
                     j++;
+                    fuck_screensaver++;
                 }               
             }
 
@@ -202,17 +221,23 @@ namespace WpfApp2
                     await oneClick(firstX, firstY, (int)blueDelay, blueHex, "blue");                    
                     await oneClick(secondX, secondY, (int)redDelay, redHex, "red");
                     
+                    /*
                     if (mouseShok == false)
                     {
-                        AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
-                        await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+                        
                     }
-                    await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
+                    */
 
+                    AddLine("Wait for 25 seconds before first color check. I will move to the pause button without clicking");
+                    await Task.Delay(25000); //there will be a loading screen and the mission starting so this is why it is 25 seconds, no real rush here
+
+                    await oneClick(pausePixelX, pausePixelY, (int)whiteDelay, whiteHex, "white");
+                    /*
                     if (mouseShok == true)
                     {
                         break;
                     }
+                    */
                 }
                 logTime = true;
                 endTime = DateTime.Now;
